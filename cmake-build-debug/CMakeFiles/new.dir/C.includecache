@@ -43,7 +43,7 @@ stdio.h
 -
 stdlib.h
 -
-SDL2/SDL.h
+SDL.h
 -
 Constants.h
 /home/haitran/CLionProjects/new/Constants.h
@@ -53,7 +53,7 @@ Utils.h
 /home/haitran/CLionProjects/new/Utils.h
 
 /home/haitran/CLionProjects/new/Draw.h
-SDL2/SDL.h
+SDL.h
 -
 Constants.h
 /home/haitran/CLionProjects/new/Constants.h
@@ -65,7 +65,7 @@ Utils.h
 /home/haitran/CLionProjects/new/Editor.c
 stdio.h
 -
-SDL2/SDL.h
+SDL.h
 -
 Constants.h
 /home/haitran/CLionProjects/new/Constants.h
@@ -81,7 +81,7 @@ handlemouseEditor.h
 /home/haitran/CLionProjects/new/Login.h
 
 /home/haitran/CLionProjects/new/Number.c
-SDL2/SDL.h
+SDL.h
 -
 Constants.h
 /home/haitran/CLionProjects/new/Constants.h
@@ -103,10 +103,6 @@ stdbool.h
 -
 
 /home/haitran/CLionProjects/new/Utils.h
-
-/home/haitran/CLionProjects/new/getstates.c
-stdio.h
--
 
 /home/haitran/CLionProjects/new/handlemouseEditor.c
 States.h

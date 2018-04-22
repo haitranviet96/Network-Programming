@@ -12,7 +12,6 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/haitran/CLionProjects/new/Number.c" "/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir/Number.c.o"
   "/home/haitran/CLionProjects/new/States.c" "/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir/States.c.o"
   "/home/haitran/CLionProjects/new/Utils.c" "/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir/Utils.c.o"
-  "/home/haitran/CLionProjects/new/getstates.c" "/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir/getstates.c.o"
   "/home/haitran/CLionProjects/new/handlemouseEditor.c" "/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir/handlemouseEditor.c.o"
   "/home/haitran/CLionProjects/new/main.c" "/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir/main.c.o"
   "/home/haitran/CLionProjects/new/ship.c" "/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir/ship.c.o"

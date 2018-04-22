@@ -339,33 +339,6 @@ Utils.c.s:
 	$(MAKE) -f CMakeFiles/new.dir/build.make CMakeFiles/new.dir/Utils.c.s
 .PHONY : Utils.c.s
 
-getstates.o: getstates.c.o
-
-.PHONY : getstates.o
-
-# target to build an object file
-getstates.c.o:
-	$(MAKE) -f CMakeFiles/new.dir/build.make CMakeFiles/new.dir/getstates.c.o
-.PHONY : getstates.c.o
-
-getstates.i: getstates.c.i
-
-.PHONY : getstates.i
-
-# target to preprocess a source file
-getstates.c.i:
-	$(MAKE) -f CMakeFiles/new.dir/build.make CMakeFiles/new.dir/getstates.c.i
-.PHONY : getstates.c.i
-
-getstates.s: getstates.c.s
-
-.PHONY : getstates.s
-
-# target to generate assembly for a file
-getstates.c.s:
-	$(MAKE) -f CMakeFiles/new.dir/build.make CMakeFiles/new.dir/getstates.c.s
-.PHONY : getstates.c.s
-
 handlemouseEditor.o: handlemouseEditor.c.o
 
 .PHONY : handlemouseEditor.o
@@ -534,9 +507,6 @@ help:
 	@echo "... Utils.o"
 	@echo "... Utils.i"
 	@echo "... Utils.s"
-	@echo "... getstates.o"
-	@echo "... getstates.i"
-	@echo "... getstates.s"
 	@echo "... handlemouseEditor.o"
 	@echo "... handlemouseEditor.i"
 	@echo "... handlemouseEditor.s"

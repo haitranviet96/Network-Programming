@@ -4,7 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/new.dir/Cruiser.c.o"
   "CMakeFiles/new.dir/Draw.c.o"
   "CMakeFiles/new.dir/Editor.c.o"
-  "CMakeFiles/new.dir/getstates.c.o"
   "CMakeFiles/new.dir/handlemouseEditor.c.o"
   "CMakeFiles/new.dir/Login.c.o"
   "CMakeFiles/new.dir/Number.c.o"

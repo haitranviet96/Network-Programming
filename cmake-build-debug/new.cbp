@@ -131,9 +131,6 @@
 		<Unit filename="/home/haitran/CLionProjects/new/Utils.h">
 			<Option target="new"/>
 		</Unit>
-		<Unit filename="/home/haitran/CLionProjects/new/getstates.c">
-			<Option target="new"/>
-		</Unit>
 		<Unit filename="/home/haitran/CLionProjects/new/handlemouseEditor.c">
 			<Option target="new"/>
 		</Unit>

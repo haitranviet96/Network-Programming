@@ -177,33 +177,9 @@ CMakeFiles/new.dir/Editor.c.o.provides: CMakeFiles/new.dir/Editor.c.o.requires
 CMakeFiles/new.dir/Editor.c.o.provides.build: CMakeFiles/new.dir/Editor.c.o
 
 
-CMakeFiles/new.dir/getstates.c.o: CMakeFiles/new.dir/flags.make
-CMakeFiles/new.dir/getstates.c.o: ../getstates.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/new.dir/getstates.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/getstates.c.o   -c /home/haitran/CLionProjects/new/getstates.c
-
-CMakeFiles/new.dir/getstates.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/new.dir/getstates.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/haitran/CLionProjects/new/getstates.c > CMakeFiles/new.dir/getstates.c.i
-
-CMakeFiles/new.dir/getstates.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/new.dir/getstates.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/haitran/CLionProjects/new/getstates.c -o CMakeFiles/new.dir/getstates.c.s
-
-CMakeFiles/new.dir/getstates.c.o.requires:
-
-.PHONY : CMakeFiles/new.dir/getstates.c.o.requires
-
-CMakeFiles/new.dir/getstates.c.o.provides: CMakeFiles/new.dir/getstates.c.o.requires
-	$(MAKE) -f CMakeFiles/new.dir/build.make CMakeFiles/new.dir/getstates.c.o.provides.build
-.PHONY : CMakeFiles/new.dir/getstates.c.o.provides
-
-CMakeFiles/new.dir/getstates.c.o.provides.build: CMakeFiles/new.dir/getstates.c.o
-
-
 CMakeFiles/new.dir/handlemouseEditor.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/handlemouseEditor.c.o: ../handlemouseEditor.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/new.dir/handlemouseEditor.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/new.dir/handlemouseEditor.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/handlemouseEditor.c.o   -c /home/haitran/CLionProjects/new/handlemouseEditor.c
 
 CMakeFiles/new.dir/handlemouseEditor.c.i: cmake_force
@@ -227,7 +203,7 @@ CMakeFiles/new.dir/handlemouseEditor.c.o.provides.build: CMakeFiles/new.dir/hand
 
 CMakeFiles/new.dir/Login.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/Login.c.o: ../Login.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/new.dir/Login.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/new.dir/Login.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/Login.c.o   -c /home/haitran/CLionProjects/new/Login.c
 
 CMakeFiles/new.dir/Login.c.i: cmake_force
@@ -251,7 +227,7 @@ CMakeFiles/new.dir/Login.c.o.provides.build: CMakeFiles/new.dir/Login.c.o
 
 CMakeFiles/new.dir/Number.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/Number.c.o: ../Number.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/new.dir/Number.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/new.dir/Number.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/Number.c.o   -c /home/haitran/CLionProjects/new/Number.c
 
 CMakeFiles/new.dir/Number.c.i: cmake_force
@@ -275,7 +251,7 @@ CMakeFiles/new.dir/Number.c.o.provides.build: CMakeFiles/new.dir/Number.c.o
 
 CMakeFiles/new.dir/ship.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/ship.c.o: ../ship.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/new.dir/ship.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/new.dir/ship.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/ship.c.o   -c /home/haitran/CLionProjects/new/ship.c
 
 CMakeFiles/new.dir/ship.c.i: cmake_force
@@ -299,7 +275,7 @@ CMakeFiles/new.dir/ship.c.o.provides.build: CMakeFiles/new.dir/ship.c.o
 
 CMakeFiles/new.dir/specialbox.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/specialbox.c.o: ../specialbox.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/new.dir/specialbox.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/new.dir/specialbox.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/specialbox.c.o   -c /home/haitran/CLionProjects/new/specialbox.c
 
 CMakeFiles/new.dir/specialbox.c.i: cmake_force
@@ -323,7 +299,7 @@ CMakeFiles/new.dir/specialbox.c.o.provides.build: CMakeFiles/new.dir/specialbox.
 
 CMakeFiles/new.dir/States.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/States.c.o: ../States.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/new.dir/States.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/new.dir/States.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/States.c.o   -c /home/haitran/CLionProjects/new/States.c
 
 CMakeFiles/new.dir/States.c.i: cmake_force
@@ -347,7 +323,7 @@ CMakeFiles/new.dir/States.c.o.provides.build: CMakeFiles/new.dir/States.c.o
 
 CMakeFiles/new.dir/submarine.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/submarine.c.o: ../submarine.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/new.dir/submarine.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/new.dir/submarine.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/submarine.c.o   -c /home/haitran/CLionProjects/new/submarine.c
 
 CMakeFiles/new.dir/submarine.c.i: cmake_force
@@ -371,7 +347,7 @@ CMakeFiles/new.dir/submarine.c.o.provides.build: CMakeFiles/new.dir/submarine.c.
 
 CMakeFiles/new.dir/Utils.c.o: CMakeFiles/new.dir/flags.make
 CMakeFiles/new.dir/Utils.c.o: ../Utils.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/new.dir/Utils.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/new.dir/Utils.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/new.dir/Utils.c.o   -c /home/haitran/CLionProjects/new/Utils.c
 
 CMakeFiles/new.dir/Utils.c.i: cmake_force
@@ -400,7 +376,6 @@ new_OBJECTS = \
 "CMakeFiles/new.dir/Cruiser.c.o" \
 "CMakeFiles/new.dir/Draw.c.o" \
 "CMakeFiles/new.dir/Editor.c.o" \
-"CMakeFiles/new.dir/getstates.c.o" \
 "CMakeFiles/new.dir/handlemouseEditor.c.o" \
 "CMakeFiles/new.dir/Login.c.o" \
 "CMakeFiles/new.dir/Number.c.o" \
@@ -418,7 +393,6 @@ new: CMakeFiles/new.dir/Battle.c.o
 new: CMakeFiles/new.dir/Cruiser.c.o
 new: CMakeFiles/new.dir/Draw.c.o
 new: CMakeFiles/new.dir/Editor.c.o
-new: CMakeFiles/new.dir/getstates.c.o
 new: CMakeFiles/new.dir/handlemouseEditor.c.o
 new: CMakeFiles/new.dir/Login.c.o
 new: CMakeFiles/new.dir/Number.c.o
@@ -429,7 +403,7 @@ new: CMakeFiles/new.dir/submarine.c.o
 new: CMakeFiles/new.dir/Utils.c.o
 new: CMakeFiles/new.dir/build.make
 new: CMakeFiles/new.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking C executable new"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking C executable new"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/new.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -442,7 +416,6 @@ CMakeFiles/new.dir/requires: CMakeFiles/new.dir/Battle.c.o.requires
 CMakeFiles/new.dir/requires: CMakeFiles/new.dir/Cruiser.c.o.requires
 CMakeFiles/new.dir/requires: CMakeFiles/new.dir/Draw.c.o.requires
 CMakeFiles/new.dir/requires: CMakeFiles/new.dir/Editor.c.o.requires
-CMakeFiles/new.dir/requires: CMakeFiles/new.dir/getstates.c.o.requires
 CMakeFiles/new.dir/requires: CMakeFiles/new.dir/handlemouseEditor.c.o.requires
 CMakeFiles/new.dir/requires: CMakeFiles/new.dir/Login.c.o.requires
 CMakeFiles/new.dir/requires: CMakeFiles/new.dir/Number.c.o.requires
