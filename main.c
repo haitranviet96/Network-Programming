@@ -55,6 +55,9 @@ int main(int argc, char **argv) {
     drawOrangeNumberTexture();
     // texturenum = SDL_CreateTextureFromSurface(renderer, numdigit);
 
+    // load font
+    loadMedia();
+
     /////////STATS and SATES
     for (int i = 0; i < HORIZONTAL_SQUARE * VERTICAL_SQUARE; i++) {
         tableStatus[i] = 0;

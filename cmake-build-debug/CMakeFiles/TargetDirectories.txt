@@ -1,3 +1,0 @@
-/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/haitran/CLionProjects/new/cmake-build-debug/CMakeFiles/new.dir
