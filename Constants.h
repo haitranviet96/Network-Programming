@@ -24,11 +24,11 @@
 #define VERTICAL_SQUARE 11
 #define NUMBER_OF_SQUARE (11 * 17)
 
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 576
+
 // variables
 static bool quit = false;
-
-static const int WINDOW_WIDTH = 1024;
-static const int WINDOW_HEIGHT = 576;
 
 SDL_Surface *orangeNumber[10];
 SDL_Texture *orangeNumberTexture[10];
@@ -39,10 +39,10 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Event event;
 
-static int click = NONE_CLICK;
-static int gameState = LOGIN_STATE;
+extern int click;
+extern int gameState;
 
-static int editState = 0;
+extern int editState;
 
 SDL_Rect gameTable[NUMBER_OF_SQUARE];
 

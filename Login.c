@@ -53,12 +53,12 @@ int loadMedia() {
 }
 
 void closeLogin() {
+    //Disable text input
+    SDL_StopTextInput();
+
     //Free loaded images
     free(gPromptTextTexture);
     free(gInputTextTexture);
-
-    //Disable text input
-    SDL_StopTextInput();
 
     //Free global font
     TTF_CloseFont(gFont);

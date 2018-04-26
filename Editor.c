@@ -5,6 +5,8 @@
 #include "handlemouseEditor.h"
 #include "States.h"
 
+int editState = 0;
+
 void scanEditor(int *x, int *y) {
     switch (event.type) {
         case SDL_KEYDOWN:
@@ -73,13 +75,13 @@ int layoutEditor(int x, int y, int *tableStatus) {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, textureEditBG, NULL, &bgRect);
 
-    draw_squares(x, y, tableStatus, gameTable, renderer);
+    draw_squares(x, y, tableStatus, gameTable);
 
     // draw number of ship
-    draw_number(911, 260, orangeNumberTexture[NUMBER_OF_SHIP[1][0]], renderer);
-    draw_number(946, 260, orangeNumberTexture[NUMBER_OF_SHIP[1][1]], renderer);
-    draw_number(980, 260, orangeNumberTexture[NUMBER_OF_SHIP[1][2]], renderer);
-    draw_number(959, 398, orangeNumberTexture[NUMBER_OF_SHIP[1][3]], renderer);
+    draw_number(911, 260, orangeNumberTexture[NUMBER_OF_SHIP[1][0]]);
+    draw_number(946, 260, orangeNumberTexture[NUMBER_OF_SHIP[1][1]]);
+    draw_number(980, 260, orangeNumberTexture[NUMBER_OF_SHIP[1][2]]);
+    draw_number(959, 398, orangeNumberTexture[NUMBER_OF_SHIP[1][3]]);
 
     if (editState == -1 || editState == -11) {
         if (editState == -11) {

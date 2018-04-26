@@ -7,7 +7,7 @@
 
 
 // Draw points with random colors and positions
-void draw_random_points(int nr_points, bool randomizeColor, SDL_Renderer *renderer)
+void draw_random_points(int nr_points, bool randomizeColor)
 {
     for(int i = 0; i < nr_points; ++i)
     {
@@ -20,7 +20,7 @@ void draw_random_points(int nr_points, bool randomizeColor, SDL_Renderer *render
 }
 
 // Draw random lines with random color
-void draw_random_lines(int nr_lines, bool randomizeColor, SDL_Renderer *renderer)
+void draw_random_lines(int nr_lines, bool randomizeColor)
 {
     for(int i = 0; i < nr_lines; ++i)
     {
@@ -33,7 +33,7 @@ void draw_random_lines(int nr_lines, bool randomizeColor, SDL_Renderer *renderer
 }
 
 
-void draw_squares(int x, int y,int* stats, SDL_Rect *rect, SDL_Renderer *renderer){
+void draw_squares(int x, int y,int* stats, SDL_Rect *rect){
     int j;
 //SDL_SetRenderDrawColor(renderer, 0, 191, 255, 255);
        // SDL_RenderClear(renderer);
@@ -102,7 +102,7 @@ void draw_squares(int x, int y,int* stats, SDL_Rect *rect, SDL_Renderer *rendere
 }
 
 
-void draw_number(int x,  int y,SDL_Texture *texture, SDL_Renderer *renderer){
+void draw_number(int x,  int y,SDL_Texture *texture){
     SDL_Rect dstrect2 = { x, y,13, 25 };
     SDL_RenderCopy(renderer, texture, NULL, &dstrect2);
 

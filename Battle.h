@@ -1,9 +1,9 @@
 #ifndef BATTLE_FILE
 #define BATTLE_FILE
 
-int layoutBattle(int x, int y, int *tableStatus);
+int battle(int x, int y, int *tableStatus);
 
-void loadBattleTexture(SDL_Renderer *renderer);
+void loadBattleTexture();
 
 void destroyBattleTexture();
 

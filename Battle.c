@@ -8,9 +8,7 @@
 SDL_Surface *playBG;
 SDL_Texture *textureBattleBG;
 
-SDL_Renderer *renderer;
-
-int layoutBattle(int x, int y, int *tableStatus) {
+int battle(int x, int y, int *tableStatus) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 55, 55);
 
     SDL_Rect bgRect = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
@@ -18,7 +16,9 @@ int layoutBattle(int x, int y, int *tableStatus) {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, textureBattleBG, NULL, &bgRect);
 
-    draw_squares(x, y, tableStatus, gameTable, renderer);
+    draw_squares(x, y, tableStatus, gameTable);
+
+
 }
 
 void loadBattleTexture() {

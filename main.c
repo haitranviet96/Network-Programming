@@ -10,6 +10,9 @@
 #include "Battle.h"
 #include "Login.h"
 
+int click;
+int gameState = LOGIN_STATE;
+
 int main(int argc, char **argv) {
     // text next to rerendered or not
     bool rendered = false;
@@ -178,11 +181,11 @@ int main(int argc, char **argv) {
             if (layoutEditor(x, y, tableStatus)) {
                 gameState = BATTLE_STATE;
                 destroyEditorTexture();
-                loadBattleTexture(renderer);
+                loadBattleTexture();
             }
         }
         if (gameState == BATTLE_STATE) {
-            if (layoutBattle(x, y, tableStatus)) {
+            if (battle(x, y, tableStatus)) {
                 destroyBattleTexture();
                 gameState = CHALLENGE_STATE;
             }
