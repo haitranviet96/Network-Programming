@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <stdbool.h>
 
 #define NONE_CLICK (-1)
 #define LEFT_CLICK 0
@@ -23,6 +24,9 @@
 #define VERTICAL_SQUARE 11
 #define NUMBER_OF_SQUARE (11 * 17)
 
+// variables
+static bool quit = false;
+
 static const int WINDOW_WIDTH = 1024;
 static const int WINDOW_HEIGHT = 576;
 
@@ -33,6 +37,12 @@ int NUMBER_OF_SHIP[NUM_PLAYER][NUM_SHIP_KIND];
 
 SDL_Window *window;
 SDL_Renderer *renderer;
+SDL_Event event;
+
+static int click = NONE_CLICK;
+static int gameState = LOGIN_STATE;
+
+static int editState = 0;
 
 SDL_Rect gameTable[NUMBER_OF_SQUARE];
 
@@ -40,5 +50,6 @@ static struct timeval startTime, now;
 
 TTF_Font* gFont;
 SDL_Texture* gPromptTextTexture;
+SDL_Texture* gInputTextTexture;
 
 #endif

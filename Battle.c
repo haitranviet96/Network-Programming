@@ -10,7 +10,7 @@ SDL_Texture *textureBattleBG;
 
 SDL_Renderer *renderer;
 
-int layoutBattle(int x, int y, int *states, int *tableStatus) {
+int layoutBattle(int x, int y, int *tableStatus) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 55, 55);
 
     SDL_Rect bgRect = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
@@ -21,9 +21,7 @@ int layoutBattle(int x, int y, int *states, int *tableStatus) {
     draw_squares(x, y, tableStatus, gameTable, renderer);
 }
 
-void loadBattleTexture(SDL_Renderer *ren) {
-    renderer = ren;
-
+void loadBattleTexture() {
     playBG = SDL_LoadBMP("assets/battle_bg.bmp");
     if (playBG == NULL) {
         printf("SDL_LoadBMP Error: Error load assets/battle_bg.bmp");

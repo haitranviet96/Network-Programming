@@ -1,9 +1,11 @@
 #ifndef EDITOR_FILE
 #define EDITOR_FILE
 
-int layoutEditor(int x, int y, int *states, int *tableStatus);
+void scanEditor(int *x, int *y);
 
-void loadEditorTexture(SDL_Renderer *renderer);
+int layoutEditor(int x, int y, int *tableStatus);
+
+void loadEditorTexture();
 
 void destroyEditorTexture();
 

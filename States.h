@@ -1,7 +1,7 @@
 #ifndef STATES_FILE
 #define STATES_FILE
 
-void changeStates(int x, int y, int *states, int click);
+void changeStates(int x, int y);
 
 int getState(int x, int y);
 

@@ -3,6 +3,55 @@
 #include "Constants.h"
 #include "Draw.h"
 #include "handlemouseEditor.h"
+#include "States.h"
+
+void scanEditor(int *x, int *y) {
+    switch (event.type) {
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym) {
+                case SDLK_LEFT:
+                    x--;
+                    break;
+                case SDLK_RIGHT:
+                    x++;
+                    break;
+                case SDLK_UP:
+                    y--;
+                    break;
+                case SDLK_DOWN:
+                    y++;
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        case SDL_MOUSEMOTION:
+            SDL_GetMouseState(x, y);
+//                if (now.tv_sec - startTime.tv_sec > 1) {
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            SDL_GetMouseState(x, y);
+            switch (event.button.button) {
+                case SDL_BUTTON_LEFT:
+                    printf("Left Mouse Clicked: %d-%d\tstates:%d\n", *x, *y, editState);
+                    click = LEFT_CLICK;
+                    // printf("%d\n",getSquare(x,y));
+                    break;
+                case SDL_BUTTON_RIGHT:
+                    click = RIGHT_CLICK;
+                    break;
+                default:
+                    //    printf("Unknown Mouse Clicked: %d-%d",x,y);
+                    break;
+            }
+            break;
+            gettimeofday(&now, NULL);
+//                }
+//                break;
+    }
+    changeStates(*x, *y);
+}
 
 ////EDITOR
 SDL_Surface *playBG;
@@ -14,8 +63,8 @@ SDL_Texture *nextBtnTexture;
 
 SDL_Renderer *renderer;
 
-int layoutEditor(int x, int y, int *states, int *tableStatus) {
-    handleMouseEditor(x, y, states, tableStatus);
+int layoutEditor(int x, int y, int *tableStatus) {
+    handleMouseEditor(x, y, &editState, tableStatus);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 55, 55);
 
@@ -32,53 +81,50 @@ int layoutEditor(int x, int y, int *states, int *tableStatus) {
     draw_number(980, 260, orangeNumberTexture[NUMBER_OF_SHIP[1][2]], renderer);
     draw_number(959, 398, orangeNumberTexture[NUMBER_OF_SHIP[1][3]], renderer);
 
-    if ((*states) == -1 || (*states) == -11) {
-        if ((*states) == -11) {
+    if (editState == -1 || editState == -11) {
+        if (editState == -11) {
             NUMBER_OF_SHIP[1][0] = NUMBER_OF_SHIP[0][0];
-            (*states) = 0;
+            editState = 0;
         }
         SDL_Rect rectRefreshBtn = {904, 305, 27, 32};
         SDL_RenderCopy(renderer, refreshBtnTexture, NULL, &rectRefreshBtn);
     }
 
-    if ((*states) == -2 || (*states) == -22) {
+    if (editState == -2 || editState == -22) {
 
-        if ((*states) == -22) {
+        if (editState == -22) {
             NUMBER_OF_SHIP[1][1] = NUMBER_OF_SHIP[0][1];
-            (*states) = 0;
-
+            editState = 0;
         }
         SDL_Rect rectRefreshBtn = {938, 305, 27, 32};
         SDL_RenderCopy(renderer, refreshBtnTexture, NULL, &rectRefreshBtn);
     }
 
-    if ((*states) == -3 || (*states) == -33) {
+    if (editState == -3 || editState == -33) {
 
-        if ((*states) == -33) {
+        if (editState == -33) {
             NUMBER_OF_SHIP[1][2] = NUMBER_OF_SHIP[0][2];
-            (*states) = 0;
-
+            editState = 0;
         }
         SDL_Rect rectRefreshBtn = {972, 305, 27, 32};
         SDL_RenderCopy(renderer, refreshBtnTexture, NULL, &rectRefreshBtn);
     }
 
-    if ((*states) == -4 || (*states) == -44) {
-        if ((*states) == -44) {
+    if (editState == -4 || editState == -44) {
+        if (editState == -44) {
             NUMBER_OF_SHIP[1][3] = NUMBER_OF_SHIP[0][3];
-            (*states) = 0;
-
+            editState = 0;
         }
         SDL_Rect rectRefreshBtn = {986, 394, 27, 32};
         SDL_RenderCopy(renderer, refreshBtnTexture, NULL, &rectRefreshBtn);
 
     }
 
-    if (((*states) == -5 || (*states) == -55) && NUMBER_OF_SHIP[1][0] == 0
+    if ((editState == -5 || editState == -55) && NUMBER_OF_SHIP[1][0] == 0
         && NUMBER_OF_SHIP[1][1] == 0 && NUMBER_OF_SHIP[1][2] == 0 && NUMBER_OF_SHIP[1][3] == 0) {
         SDL_Rect rectRefreshBtn = {883, 504, 136, 49};
         SDL_RenderCopy(renderer, nextBtnTexture, NULL, &rectRefreshBtn);
-        if ((*states) == -55) {
+        if (editState == -55) {
             //printf("sakdasdasd");
             FILE *file;
             file = fopen("assets/data/map.txt", "w+");
@@ -94,9 +140,7 @@ int layoutEditor(int x, int y, int *states, int *tableStatus) {
     return 0;
 }
 
-void loadEditorTexture(SDL_Renderer *ren) {
-    renderer = ren;
-
+void loadEditorTexture() {
     playBG = SDL_LoadBMP("assets/editor_bg.bmp");
     if (playBG == NULL) {
         printf("SDL_LoadBMP Error: Error load assets/editor_bg.bmp");
@@ -122,7 +166,7 @@ void loadEditorTexture(SDL_Renderer *ren) {
     SDL_FreeSurface(next);
 }
 
-void destroyEditorTexture(){
+void destroyEditorTexture() {
     SDL_DestroyTexture(textureEditBG);
     SDL_DestroyTexture(refreshBtnTexture);
     SDL_DestroyTexture(nextBtnTexture);
