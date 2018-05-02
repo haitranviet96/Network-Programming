@@ -30,19 +30,32 @@
 // variables
 static bool quit = false;
 
+static const SDL_Color textColor = {0xFF, 0xFF, 0xF2, 0xFF};
+
 SDL_Surface *orangeNumber[10];
 SDL_Texture *orangeNumberTexture[10];
 
 int NUMBER_OF_SHIP[NUM_PLAYER][NUM_SHIP_KIND];
 
 SDL_Window *window;
-SDL_Renderer *renderer;
+extern SDL_Renderer *renderer;
 SDL_Event event;
 
 extern int click;
 extern int gameState;
+extern char* inputText;
+extern int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+extern int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
 extern int editState;
+enum BATTLESTATE {
+    PLAYER_TURN,
+    PLAYER_HIT,
+    OPPONENT_TURN,
+};
+extern enum BATTLESTATE currentBattleState;
+extern SDL_Texture* explodeTexture;
+extern SDL_Texture* missTexture;
 
 SDL_Rect gameTable[NUMBER_OF_SQUARE];
 

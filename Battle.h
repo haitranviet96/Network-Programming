@@ -1,7 +1,9 @@
 #ifndef BATTLE_FILE
 #define BATTLE_FILE
 
-int battle(int x, int y, int *tableStatus);
+void scanBattle(int *x, int *y);
+
+int battle(int x, int y, int *playerTableStatus, int *opponentTableStatus);
 
 void loadBattleTexture();
 

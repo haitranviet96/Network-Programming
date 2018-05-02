@@ -38,7 +38,6 @@ void scanEditor(int *x, int *y) {
                 case SDL_BUTTON_LEFT:
                     printf("Left Mouse Clicked: %d-%d\tstates:%d\n", *x, *y, editState);
                     click = LEFT_CLICK;
-                    // printf("%d\n",getSquare(x,y));
                     break;
                 case SDL_BUTTON_RIGHT:
                     click = RIGHT_CLICK;
@@ -48,11 +47,8 @@ void scanEditor(int *x, int *y) {
                     break;
             }
             break;
-            gettimeofday(&now, NULL);
-//                }
-//                break;
     }
-    changeStates(*x, *y);
+    changeEditorStates(*x, *y);
 }
 
 ////EDITOR
@@ -127,7 +123,6 @@ int layoutEditor(int x, int y, int *tableStatus) {
         SDL_Rect rectRefreshBtn = {883, 504, 136, 49};
         SDL_RenderCopy(renderer, nextBtnTexture, NULL, &rectRefreshBtn);
         if (editState == -55) {
-            //printf("sakdasdasd");
             FILE *file;
             file = fopen("assets/data/map.txt", "w+");
             for (int i = 0; i < VERTICAL_SQUARE * HORIZONTAL_SQUARE; i++) {

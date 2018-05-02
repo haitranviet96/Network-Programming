@@ -132,7 +132,7 @@ void handleMouseEditor(int x, int y, int *states, int *tableStatus) {
             }
         }
     }
-    // return getState(x,y);
+    // return getEditorState(x,y);
 }
 
 

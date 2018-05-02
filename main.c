@@ -9,23 +9,27 @@
 #include "Editor.h"
 #include "Battle.h"
 #include "Login.h"
+#include "Utils.h"
 
 int click;
 int gameState = LOGIN_STATE;
+char *inputText;
+int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
 int main(int argc, char **argv) {
     // text next to rerendered or not
     bool rendered = false;
 
     // login user text
-    SDL_Color textColor = {0xFF, 0xFF, 0xFF, 0xFF};
-    char *inputText = (char *) malloc(50);
+    inputText = (char *) malloc(50);
 
     int x = 288;
     int y = 208;
     int j = 0;
 
-    int tableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+    int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+    int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
     FILE *data;
     char c;
 
@@ -57,9 +61,32 @@ int main(int argc, char **argv) {
 
     /////////STATS and SATES
     for (int i = 0; i < HORIZONTAL_SQUARE * VERTICAL_SQUARE; i++) {
-        tableStatus[i] = 0;
+        playerTableStatus[i] = 0;
+        opponentTableStatus[i] = 0;
     }
     ////////////////////////
+    // Initialize SDL_ttf
+    if (TTF_Init() == -1) {
+        printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+    }
+
+    //Open the font
+    gFont = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", 24);
+    if (gFont == NULL) {
+        printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+    }
+
+    if (gameState == LOGIN_STATE) {
+        //Render the prompt
+        if (!loadFromRenderedText(&gPromptTextTexture, "Enter your name:", textColor)) {
+            printf("Failed to render prompt text!\n");
+            printf("Failed to load media!\n");
+        }
+        //Enable text input
+        SDL_StartTextInput();
+    }
+
+    loadEditorTexture();
 
     ////////DATA
     data = fopen("assets/data/data.txt", "r+");
@@ -72,6 +99,43 @@ int main(int argc, char **argv) {
         NUMBER_OF_SHIP[0][j] = -48 + (int) c;
         NUMBER_OF_SHIP[1][j] = NUMBER_OF_SHIP[0][j];
     }
+    ////////////////////////
+    data = fopen("assets/data/map_opponent.txt", "r+");
+    if (data == NULL) {
+        printf("Error opening data files!\n");
+        return -1;
+    }
+    /* Get the number of bytes */
+    fseek(data, 0L, SEEK_END);
+    long numbytes = ftell(data);
+
+    /* reset the file position indicator to
+    the beginning of the file */
+    fseek(data, 0L, SEEK_SET);
+
+    /* grab sufficient memory for the
+    buffer to hold the text */
+    char *buffer = (char *) calloc((size_t) numbytes, sizeof(char));
+
+    /* memory error */
+    if (buffer == NULL)
+        return 1;
+
+    /* copy all the text into the buffer */
+    fread(buffer, sizeof(char), (size_t) numbytes, data);
+
+    char *token;
+
+    j = 0;
+
+    /* get the first token */
+    token = strtok(buffer, "\t\n");
+    while (token != NULL) {
+        opponentTableStatusTemp[j] = atoi(token);
+        j++;
+        token = strtok(NULL, "\t\n");
+    }
+
     ////////////////////////
 
     gettimeofday(&startTime, NULL);
@@ -91,115 +155,45 @@ int main(int argc, char **argv) {
         click = NONE_CLICK;
 
         if (gameState == LOGIN_STATE) {
-            if (!rendered) {
-                // load font
-                rendered = true;
-                // Initialize SDL_ttf
-                if (TTF_Init() == -1) {
-                    printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-                } else {
-                    //Load media
-                    if (!loadMedia()) {
-                        printf("Failed to load media!\n");
-                    }
-
-                    // text color white
-                    loadFromRenderedText(&gInputTextTexture, inputText, textColor);
-
-                    //Enable text input
-                    SDL_StartTextInput();
-                }
-            } else {
-                //The rerender text flag
-                bool renderText = false;
-
-                if (event.type == SDL_KEYDOWN) {
-                    //Handle backspace
-                    if (event.key.keysym.sym == SDLK_BACKSPACE && strlen(inputText) > 0) {
-                        //lop off character
-                        inputText[strlen(inputText) - 1] = 0;
-                        renderText = true;
-                    }
-                        //Handle copy
-                    else if (event.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL) {
-                        SDL_SetClipboardText(inputText);
-                    }
-                        //Handle paste
-                    else if (event.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL) {
-                        inputText = SDL_GetClipboardText();
-                        renderText = true;
-                    }else if (event.key.keysym.sym == SDLK_RETURN && strlen(inputText) >= 6) {
-                        // continue
-                        gameState = EDITOR_STATE;
-                        closeLogin();
-                        loadEditorTexture();
-                    }
-                }
-                    //Special text input event
-                else if (event.type == SDL_TEXTINPUT) {
-                    //Not copy or pasting
-                    if (!((event.text.text[0] == 'c' || event.text.text[0] == 'C') &&
-                          (event.text.text[0] == 'v' || event.text.text[0] == 'V') && SDL_GetModState() & KMOD_CTRL)) {
-                        //Append character
-                        strcat(inputText, event.text.text);
-                        renderText = true;
-                    }
-                }
-
-
-                //Rerender text if needed
-                if (renderText) {
-                    //Text is not empty
-                    if (inputText != "") {
-                        //Render new text
-                        puts(inputText);
-                        loadFromRenderedText(&gInputTextTexture, inputText, textColor);
-                    }
-                        //Text is empty
-                    else {
-                        //Render space texture
-                        loadFromRenderedText(&gInputTextTexture, " ", textColor);
-                    }
-                }
-
-                //Clear screen
-                SDL_SetRenderDrawColor(renderer,0, 0, 0, 0xFF);
-                SDL_RenderClear(renderer);
-
-                int w, h;
-                SDL_QueryTexture(gPromptTextTexture, NULL, NULL, &w, &h);
-
-                //Render text textures
-                render(gPromptTextTexture, (WINDOW_WIDTH - w) / 2, 0, NULL, 0, NULL, SDL_FLIP_NONE);
-
-                SDL_QueryTexture(gInputTextTexture, NULL, NULL, &w, &h);
-                render(gInputTextTexture, (WINDOW_WIDTH - w) / 2, h, NULL, 0, NULL, SDL_FLIP_NONE);
-            }
+            if (receiveUserName(&rendered)) {
+                // continue
+                gameState = EDITOR_STATE;
+                closeLogin();
+                loadEditorTexture();
+            };
         }
         if (gameState == EDITOR_STATE) {
-            scanEditor(&x,&y);
-            if (layoutEditor(x, y, tableStatus)) {
+            scanEditor(&x, &y);
+            if (layoutEditor(x, y, playerTableStatus)) {
                 gameState = BATTLE_STATE;
                 destroyEditorTexture();
                 loadBattleTexture();
             }
         }
         if (gameState == BATTLE_STATE) {
-            if (battle(x, y, tableStatus)) {
-                destroyBattleTexture();
+            scanBattle(&x, &y);
+            if (battle(x, y, playerTableStatus, opponentTableStatus)) {
                 gameState = CHALLENGE_STATE;
+                destroyBattleTexture();
             }
         }
 
         SDL_RenderPresent(renderer);
     }
 
-// Destroy texture
+    // Destroy texture
     destroyOrangeNumberTexture();
 
-// Destroy SDL
+    // Destroy SDL
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+
+    //Free global font
+    TTF_CloseFont(gFont);
+    gFont = NULL;
+
+    //Quit SDL subsystems
+    TTF_Quit();
 
     SDL_Quit();
 

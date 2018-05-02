@@ -33,4 +33,4 @@ add_executable(new
         Utils.c
         Constants.h)
 
-target_link_libraries(new ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} SDL2_ttf)
+target_link_libraries(new ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} SDL2_ttf SDL2_image)

@@ -1,6 +1,6 @@
 #include "Constants.h"
 
-//#include "getState.c"
+//#include "getEditorState.c"
 //states determine which is select, which is clicked
 //EX:   1 means SHIP is selected, and preparing to place
 //      10 means SHIP is selected and clicked
@@ -12,7 +12,7 @@ int getSquare(int x, int y) {
     return -1;
 }
 
-int getState(int x, int y) {
+int getEditorState(int x, int y) {
     if (891 <= x && x < 1015 && 40 <= y && y <= 92)
         return 1; // Selecting ship 1
     if (891 <= x && x < 1015 && 108 <= y && y <= 162) return 2; // Selecting ship 2
@@ -26,10 +26,10 @@ int getState(int x, int y) {
     return 0;
 }
 
-void changeStates(int x, int y) {
+void changeEditorStates(int x, int y) {
     if (click < LEFT_CLICK && editState <= 0) {
-        if (getState(x, y) <= 0)
-            editState = getState(x, y);
+        if (getEditorState(x, y) <= 0)
+            editState = getEditorState(x, y);
         return;
     }
     if (editState == 1 && click == LEFT_CLICK && getSquare(x, y) >= 0) {
@@ -79,9 +79,48 @@ void changeStates(int x, int y) {
 
         editState = -444;//Removing black square
     } else if (getSquare(x, y) < 0 && click == LEFT_CLICK) {
-        editState = getState(x, y);
+        editState = getEditorState(x, y);
     }
 }
 
+enum BATTLESTATE getBattleState(int x, int y) {
+//    if (891 <= x && x < 1015 && 40 <= y && y <= 92)
+//        return 1; // Selecting ship 1
+//    if (891 <= x && x < 1015 && 108 <= y && y <= 162) return 2; // Selecting ship 2
+//    if (891 <= x && x < 1015 && 178 <= y && y <= 231) return 3; // Selecting ship 3
+//    if (890 <= x && x < 940 && 384 <= y && y < 435) return 4;// Selecting headquarter
+//    if (906 <= x && x < 928 && 307 <= y && y <= 334) return -1; // Remove ship 1
+//    if (941 <= x && x < 963 && 307 <= y && y <= 334) return -2; // Remove ship 2
+//    if (976 <= x && x < 998 && 307 <= y && y <= 334) return -3; // Remove ship 3
+//    if (988 <= x && x < 1008 && 398 <= y && y <= 424) return -4; // Remove headquarter
+//    if (893 <= x && x < 1002 && 514 <= y && y <= 544) return -5; // NEXT
+    return OPPONENT_TURN;
+}
 
-
+void changeBattleStates(int x, int y) {
+    switch (click) {
+        case NONE_CLICK:
+            switch (currentBattleState) {
+                case PLAYER_TURN:
+                    return;
+                case OPPONENT_TURN:
+                    return;
+                default:
+                    break;
+            }
+            break;
+        case LEFT_CLICK:
+            if (getSquare(x, y) >= 0) {
+                // left click inside battle field
+                if (currentBattleState == PLAYER_TURN)
+                    currentBattleState = PLAYER_HIT;
+                else if(currentBattleState == OPPONENT_TURN)
+                    currentBattleState = PLAYER_TURN;
+            }
+            break;
+        case RIGHT_CLICK:
+            break;
+        default:
+            break;
+    }
+}

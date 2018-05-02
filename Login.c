@@ -3,53 +3,80 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include "Constants.h"
+#include "Utils.h"
 
-int loadFromRenderedText(SDL_Texture **texture, char *text, SDL_Color color) {
-    SDL_DestroyTexture(*texture);
-    if (text != NULL && text[0] != (char)'\0') {
-        //Render text surface
-        SDL_Surface *textSurface = TTF_RenderText_Solid(gFont, text, color);
-        if (textSurface != NULL) {
-            //Create texture from surface pixels
-            (*texture) = SDL_CreateTextureFromSurface(renderer, textSurface);
-            if ((*texture) == NULL) {
-                printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
-            } else {
-                //Get image dimensions
-                textSurface->w;
-                textSurface->h;
-            }
+int receiveUserName(bool *rendered) {
+    if (!(*rendered)) {
+        // load font
+        *rendered = true;
 
-            //Get rid of old surface
-            SDL_FreeSurface(textSurface);
-        } else {
-            printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
-        }
-    }
-
-    //Return success
-    return (*texture) != NULL;
-}
-
-int loadMedia() {
-    //Loading success flag
-    int success = 1;
-
-    //Open the font
-    gFont = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", 36);
-    if (gFont == NULL) {
-        printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
-        success = 0;
+        // text color white
+        loadFromRenderedText(&gInputTextTexture, inputText, textColor);
     } else {
-        //Render the prompt
-        SDL_Color textColor = {0xFF, 0xFF, 0xFF, 0xFF};
-        if (!loadFromRenderedText(&gPromptTextTexture, "Enter your name:", textColor)) {
-            printf("Failed to render prompt text!\n");
-            success = 0;
+        //The rerender text flag
+        bool renderText = false;
+
+        if (event.type == SDL_KEYDOWN) {
+            //Handle backspace
+            if (event.key.keysym.sym == SDLK_BACKSPACE && strlen(inputText) > 0) {
+                //lop off character
+                inputText[strlen(inputText) - 1] = 0;
+                renderText = true;
+            }
+                //Handle copy
+            else if (event.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL) {
+                SDL_SetClipboardText(inputText);
+            }
+                //Handle paste
+            else if (event.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL) {
+                inputText = SDL_GetClipboardText();
+                renderText = true;
+            } else if (event.key.keysym.sym == SDLK_RETURN && strlen(inputText) >= 6) {
+                return 1;
+            }
         }
+            //Special text input event
+        else if (event.type == SDL_TEXTINPUT) {
+            //Not copy or pasting
+            if (!((event.text.text[0] == 'c' || event.text.text[0] == 'C') &&
+                  (event.text.text[0] == 'v' || event.text.text[0] == 'V') && SDL_GetModState() & KMOD_CTRL)) {
+                //Append character
+                strcat(inputText, event.text.text);
+                renderText = true;
+            }
+        }
+
+
+        //Rerender text if needed
+        if (renderText) {
+            //Text is not empty
+            if (inputText != "") {
+                //Render new text
+                puts(inputText);
+                loadFromRenderedText(&gInputTextTexture, inputText, textColor);
+            }
+                //Text is empty
+            else {
+                //Render space texture
+                loadFromRenderedText(&gInputTextTexture, " ", textColor);
+            }
+        }
+
+        //Clear screen
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
+        SDL_RenderClear(renderer);
+
+        int w, h;
+        SDL_QueryTexture(gPromptTextTexture, NULL, NULL, &w, &h);
+
+        //Render text textures
+        render(gPromptTextTexture, (WINDOW_WIDTH - w) / 2, (WINDOW_HEIGHT - h) / 2 - h, NULL, 0, NULL, SDL_FLIP_NONE);
+
+        SDL_QueryTexture(gInputTextTexture, NULL, NULL, &w, &h);
+        render(gInputTextTexture, (WINDOW_WIDTH - w) / 2, (WINDOW_HEIGHT - h) / 2, NULL, 0, NULL, SDL_FLIP_NONE);
     }
 
-    return success;
+    return 0;
 }
 
 void closeLogin() {
@@ -59,28 +86,4 @@ void closeLogin() {
     //Free loaded images
     free(gPromptTextTexture);
     free(gInputTextTexture);
-
-    //Free global font
-    TTF_CloseFont(gFont);
-    gFont = NULL;
-
-    //Quit SDL subsystems
-    TTF_Quit();
-}
-
-void
-render(SDL_Texture *texture, int x, int y, SDL_Rect *clip, double angle, SDL_Point *center, SDL_RendererFlip flip) {
-    int w, h;
-    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-    //Set rendering space and render to screen
-    SDL_Rect renderQuad = {x, y, w, h};
-
-    //Set clip rendering dimensions
-    if (clip != NULL) {
-        renderQuad.w = clip->w;
-        renderQuad.h = clip->h;
-    }
-
-    //Render to screen
-    SDL_RenderCopyEx(renderer, texture, clip, &renderQuad, angle, center, flip);
 }
