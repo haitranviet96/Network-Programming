@@ -75,9 +75,9 @@ void draw_squares(int x, int y, int *stats, SDL_Rect *rect) {
         // stats =30: CRUISER  HORIZONTAL
         // stats =33: CRUISER  VERTICAL
         SDL_RenderFillRect(renderer, &rect[j]);
-        if(stats[j] == 'h')
+        if (stats[j] == 'h')
             SDL_RenderCopy(renderer, explodeTexture, NULL, &rect[j]);
-        else if(stats[j] == 'm')
+        else if (stats[j] == 'm')
             SDL_RenderCopy(renderer, missTexture, NULL, &rect[j]);
     }
     // SDL_RenderPresent(renderer)
