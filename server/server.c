@@ -91,7 +91,7 @@ void* routine_thread(void* arg)
 			// Informations about the other players
 			for (i=0;i<MAXPLAYER;i++)
 			{
-				if (player_tab[i].mode == 0 && strlen(player_tab[i].name) != 0 && player_tab[i].status != INGAME)
+				if (strlen(player_tab[i].name) != 0 && player_tab[i].status != INGAME)
 				{
 					strcpy(addr,inet_ntoa(player_tab[i].addr_l.sin_addr));
 					sprintf(buff,"GAME %s %s %d %d",player_tab[i].name,addr,ntohs(player_tab[i].addr_l.sin_port),player_tab[i].status);
