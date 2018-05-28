@@ -33,6 +33,8 @@ int main(int argc, char **argv) {
     int x = 288;
     int y = 208;
     int j = 0;
+    int games_count;
+    game_t games[MAX_GAMES];
 
     int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
     int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
@@ -164,6 +166,14 @@ int main(int argc, char **argv) {
             if (receiveUserName(&rendered)) {
                 // continue
                 sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l);
+
+                // Fetch and select a game
+                games_count = get_games(sfd_s, games);
+                printf("%d games received.\n", games_count);
+                print_games(games, games_count);
+
+                printf("Test\n");
+
                 gameState = EDITOR_STATE;
                 closeLogin();
                 loadChallengeTexture();
