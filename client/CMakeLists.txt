@@ -31,6 +31,12 @@ add_executable(new
         submarine.c
         Utils.h
         Utils.c
-        Constants.h)
+        Constants.h
+        network.c
+        network.h
+        overall_net.c
+        overall_net.h
+        Challenge.c
+        Challenge.h)
 
 target_link_libraries(new ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} SDL2_ttf SDL2_image)

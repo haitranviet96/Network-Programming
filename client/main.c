@@ -10,6 +10,8 @@
 #include "Battle.h"
 #include "Login.h"
 #include "Utils.h"
+#include "overall_net.h"
+#include "Challenge.h"
 
 int click;
 int gameState = LOGIN_STATE;
@@ -18,7 +20,11 @@ int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
 int main(int argc, char **argv) {
-    // text next to rerendered or not
+    // client server connect
+    int sfd_s, sfd_l; // s: server, l: listening
+    opponent_t connected;
+
+    // rendered or not
     bool rendered = false;
 
     // login user text
@@ -157,7 +163,18 @@ int main(int argc, char **argv) {
         if (gameState == LOGIN_STATE) {
             if (receiveUserName(&rendered)) {
                 // continue
+                sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l);
                 gameState = EDITOR_STATE;
+                closeLogin();
+                loadChallengeTexture();
+                rendered = false;
+            };
+        }
+        if (gameState == CHALLENGE_STATE) {
+            if (renderListHost(&rendered)) {
+                // continue
+
+                gameState = CHALLENGE_STATE;
                 closeLogin();
                 loadEditorTexture();
             };
