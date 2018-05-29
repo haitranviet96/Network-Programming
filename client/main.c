@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <zconf.h>
 
 #include "States.h"
 #include "Number.h"
@@ -10,6 +11,8 @@
 #include "Battle.h"
 #include "Login.h"
 #include "Utils.h"
+#include "overall_net.h"
+#include "Challenge.h"
 
 int click;
 int gameState = LOGIN_STATE;
@@ -17,15 +20,22 @@ char *inputText;
 int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
+int games_count;
+game_t games[MAX_GAMES];
+
 int main(int argc, char **argv) {
-    // text next to rerendered or not
+    // client server connect
+    int sfd_s, sfd_l; // s: server, l: listening
+    opponent_t connected;
+
+    // rendered or not
     bool rendered = false;
 
     // login user text
     inputText = (char *) malloc(50);
 
-    int x = 288;
-    int y = 208;
+    int x = 0;
+    int y = 0;
     int j = 0;
 
     int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
@@ -71,22 +81,22 @@ int main(int argc, char **argv) {
     }
 
     //Open the font
-    gFont = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", 24);
-    if (gFont == NULL) {
+    boldFont = TTF_OpenFont("assets/fonts/OpenSans-Bold.ttf", 32);
+    if (boldFont == NULL) {
+        printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+    }
+
+    regularFont = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", 24);
+    if (regularFont == NULL) {
         printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
     }
 
     if (gameState == LOGIN_STATE) {
-        //Render the prompt
-        if (!loadFromRenderedText(&gPromptTextTexture, "Enter your name:", textColor)) {
-            printf("Failed to render prompt text!\n");
-            printf("Failed to load media!\n");
-        }
         //Enable text input
         SDL_StartTextInput();
     }
 
-    loadEditorTexture();
+    loadLoginTexture();
 
     ////////DATA
     data = fopen("assets/data/data.txt", "r+");
@@ -157,9 +167,31 @@ int main(int argc, char **argv) {
         if (gameState == LOGIN_STATE) {
             if (receiveUserName(&rendered)) {
                 // continue
-                gameState = EDITOR_STATE;
+                sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l);
                 closeLogin();
+
+                sleep(1);
+                gameState = CHALLENGE_STATE;
+                rendered = false;
+
+                // Fetch and select a game
+                games_count = get_games(sfd_s, games);
+                printf("%d games received.\n", games_count);
+                print_games(games, games_count);
+
+                loadChallengeTexture();
+            };
+        }
+        if (gameState == CHALLENGE_STATE) {
+            scanChallenge(&x, &y);
+            if (renderListHost(x,y)) {
+                // continue to editor state
+
+                gameState = EDITOR_STATE;
+                closeChallenge();
                 loadEditorTexture();
+                rendered = false;
+                click = NONE_CLICK;
             };
         }
         if (gameState == EDITOR_STATE) {
@@ -189,8 +221,8 @@ int main(int argc, char **argv) {
     SDL_DestroyWindow(window);
 
     //Free global font
-    TTF_CloseFont(gFont);
-    gFont = NULL;
+    TTF_CloseFont(boldFont);
+    boldFont = NULL;
 
     //Quit SDL subsystems
     TTF_Quit();

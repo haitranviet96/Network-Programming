@@ -30,7 +30,7 @@ int loadFromRenderedText(SDL_Texture **texture, char *text, SDL_Color color) {
     SDL_DestroyTexture(*texture);
     if (text != NULL && text[0] != (char)'\0') {
         //Render text surface
-        SDL_Surface *textSurface = TTF_RenderText_Solid(gFont, text, color);
+        SDL_Surface *textSurface = TTF_RenderText_Solid(boldFont, text, color);
         if (textSurface != NULL) {
             //Create texture from surface pixels
             (*texture) = SDL_CreateTextureFromSurface(renderer, textSurface);

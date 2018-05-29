@@ -5,6 +5,19 @@
 #include "Constants.h"
 #include "Utils.h"
 
+SDL_Texture* loginBgTexture;
+
+void loadLoginTexture(){
+    // create bg texture
+    SDL_Surface *bgSurface = IMG_Load("assets/login_bg.png");
+    if (bgSurface == NULL) {
+        printf("IMG_Load Error: Error load assets/login_bg.png");
+        return;
+    }
+    loginBgTexture = SDL_CreateTextureFromSurface(renderer, bgSurface);
+    SDL_FreeSurface(bgSurface);
+}
+
 int receiveUserName(bool *rendered) {
     if (!(*rendered)) {
         // load font
@@ -63,15 +76,12 @@ int receiveUserName(bool *rendered) {
         }
 
         //Clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
+        SDL_Rect bgRect = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
         SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, loginBgTexture, NULL, &bgRect);
 
         int w, h;
-        SDL_QueryTexture(gPromptTextTexture, NULL, NULL, &w, &h);
-
         //Render text textures
-        render(gPromptTextTexture, (WINDOW_WIDTH - w) / 2, (WINDOW_HEIGHT - h) / 2 - h, NULL, 0, NULL, SDL_FLIP_NONE);
-
         SDL_QueryTexture(gInputTextTexture, NULL, NULL, &w, &h);
         render(gInputTextTexture, (WINDOW_WIDTH - w) / 2, (WINDOW_HEIGHT - h) / 2, NULL, 0, NULL, SDL_FLIP_NONE);
     }
@@ -84,6 +94,6 @@ void closeLogin() {
     SDL_StopTextInput();
 
     //Free loaded images
-    free(gPromptTextTexture);
     free(gInputTextTexture);
+    free(loginBgTexture);
 }
