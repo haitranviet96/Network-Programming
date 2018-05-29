@@ -30,7 +30,7 @@ void sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen) {
 	check(connect(*sfd_server, (struct sockaddr*)&addr_s, sizeof(addr_s)), "Error connecting");
 
 	// Sending listening socket info
-	sprintf(buff, "HOST %s %d", nick, ntohs(addr_l.sin_port)); // HOST <nick> <port> <mode>
+	sprintf(buff, "LOGIN %s %d", nick, ntohs(addr_l.sin_port)); // HOST <nick> <port> <mode>
 	check(send(*sfd_server, buff, strlen(buff)+1, 0), "Error sending");
 }
 

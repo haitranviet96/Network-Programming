@@ -12,6 +12,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <SDL.h>
 
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -78,7 +79,7 @@
  * \brief	Checks that a system call does not fail
  */
 # define check(sts,msg) if((sts) == -1) { \
-	perror(msg); exit(EXIT_FAILURE);}
+	perror(msg); SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Error !", msg, NULL); exit(EXIT_FAILURE);}
 
 // Structures
 

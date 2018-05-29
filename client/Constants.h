@@ -7,6 +7,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <stdbool.h>
+#include "overall_net.h"
 
 #define NONE_CLICK (-1)
 #define LEFT_CLICK 0
@@ -20,6 +21,8 @@
 #define NUM_SHIP_KIND 4
 #define NUM_PLAYER 2
 
+#define MAX_NUM_PLAYER 12
+
 #define HORIZONTAL_SQUARE 17
 #define VERTICAL_SQUARE 11
 #define NUMBER_OF_SQUARE (11 * 17)
@@ -30,7 +33,7 @@
 // variables
 static bool quit = false;
 
-static const SDL_Color textColor = {0xFF, 0xFF, 0xF2, 0xFF};
+static const SDL_Color textColor = {0x00, 0x00, 0x00, 0xFF};
 
 SDL_Surface *orangeNumber[10];
 SDL_Texture *orangeNumberTexture[10];
@@ -58,11 +61,14 @@ extern SDL_Texture* explodeTexture;
 extern SDL_Texture* missTexture;
 
 SDL_Rect gameTable[NUMBER_OF_SQUARE];
+SDL_Rect peopleRect[MAX_NUM_PLAYER];
+extern game_t games[MAX_GAMES];
+extern int games_count;
 
 static struct timeval startTime, now;
 
-TTF_Font* gFont;
-SDL_Texture* gPromptTextTexture;
+TTF_Font* boldFont;
+TTF_Font* regularFont;
 SDL_Texture* gInputTextTexture;
 
 #endif

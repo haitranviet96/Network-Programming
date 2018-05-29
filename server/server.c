@@ -73,10 +73,10 @@ void* routine_thread(void* arg)
 		printf("%s\n", cmd);
 		printf("Received : %s \n",buff);
 		// Compare the request and execute it
-		if (!strcmp("HOST",cmd))
+		if (!strcmp("LOGIN",cmd))
 		{
 			// Informations about the player
-			sscanf(buff,"HOST %s %d %d",arg_pl->name,&port,&mode);
+			sscanf(buff,"LOGIN %s %d %d",arg_pl->name,&port,&mode);
 			arg_pl->addr_l = arg_pl->addr_d;
 			arg_pl->addr_l.sin_port = htons(port);
 			arg_pl->mode = mode;

@@ -137,7 +137,7 @@ void loadBattleTexture() {
     SDL_FreeSurface(missSurface);
 
     // create instruct texture
-    SDL_Surface *instructionSurface = TTF_RenderText_Blended_Wrapped(gFont,
+    SDL_Surface *instructionSurface = TTF_RenderText_Blended_Wrapped(regularFont,
                                                                      "Your turn. Please choose a coordinate to shoot.",
                                                                      textColor, 140);
     if (instructionSurface != NULL) {
@@ -152,7 +152,7 @@ void loadBattleTexture() {
         printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
     }
 
-    instructionSurface = TTF_RenderText_Blended_Wrapped(gFont,
+    instructionSurface = TTF_RenderText_Blended_Wrapped(regularFont,
                                                         "Opponent's turn. Please wait ...",
                                                         textColor, 140);
     if (instructionSurface != NULL) {
