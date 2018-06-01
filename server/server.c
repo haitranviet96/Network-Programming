@@ -12,6 +12,12 @@
 
 struct player player_tab[MAXPLAYER];//!< Array of connected players
 
+void error(const char *msg)
+{
+    perror(msg);
+    pthread_exit(NULL);
+}
+
 /**
  * \brief	Server main thread
  * \returns	0 if success, 1 if error.
@@ -55,10 +61,11 @@ void* routine_thread(void* arg)
 {
 	// Variable declaration
 	struct player* arg_pl = (struct player*)arg;
-
 	char buff[MAXBUFF];
 	int sts;
 	char cmd[50];
+	char str[100];
+
 	char addr[50];
 	int port;
 	int mode; // 0. Host 1. Join
@@ -84,7 +91,13 @@ void* routine_thread(void* arg)
 			printf("Name : %s \t Address : %s \t Port : %d \t Host/Player : %d \n",arg_pl->name,inet_ntoa(arg_pl->addr_l
 																											   .sin_addr),ntohs(arg_pl->addr_l.sin_port),arg_pl->mode);
 			//** FIN TEST **//
-			
+			int cn = read(arg_pl->sfd, str, 100);
+			printf("GAMEv %d", cn);
+			if(cn == 0) {
+				// shutdown(arg_pl->sfd, SHUT_RDWR);	
+				// exit(1);
+					pthread_exit(NULL);
+			}
 		}
 		else if (!strcmp("GAMES",cmd)) // Scan for games
 		{
@@ -101,6 +114,7 @@ void* routine_thread(void* arg)
 				}
 			}
 			CHECK(send(arg_pl->sfd,"STOP",strlen("STOP")+1,0),"Error : write");
+		
 			
 		}
 		else if (!strcmp("JOIN",cmd))
@@ -108,7 +122,7 @@ void* routine_thread(void* arg)
 			sscanf(buff,"%s %s %s %d",cmd,name,addr,&port);
 			for (i=0;i<MAXPLAYER;i++)
 			{
-				if (!strcmp(player_tab[i].name,name) && htons(port)==player_tab[i].addr_l.sin_port && !strcmp(inet_ntoa(player_tab[i].addr_l.sin_addr),addr))
+				if (strlen(player_tab[i].name) != 0 && player_tab[i].status != INGAME && strcmp(player_tab[i].name,arg_pl->name) != 0)
 				{
 					player_tab[i].status = READY;
 					player_tab[i].opponent = arg_pl;
@@ -130,6 +144,6 @@ void* routine_thread(void* arg)
 			printf("%s Status : %d \t %s Status : %d \n",arg_pl->name,arg_pl->status,arg_pl->opponent->name,arg_pl->opponent->status);
 			//** FIN TEST **//
 		}
-	}	
+	}
 	pthread_exit(NULL);
 }

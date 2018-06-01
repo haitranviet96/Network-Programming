@@ -17,6 +17,10 @@
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include <pthread.h>
+#include <sys/types.h> 
+#include <netinet/in.h>
+#include <unistd.h>
+
 
 
 /**
