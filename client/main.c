@@ -18,7 +18,9 @@ int click;
 int gameState = LOGIN_STATE;
 char *inputText;
 int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
-int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+
+int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
 int games_count;
 game_t games[MAX_GAMES];
@@ -38,8 +40,6 @@ int main(int argc, char **argv) {
     int y = 0;
     int j = 0;
 
-    int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
-    int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
     FILE *data;
     char c;
 
@@ -167,19 +167,20 @@ int main(int argc, char **argv) {
         if (gameState == LOGIN_STATE) {
             if (receiveUserName(&rendered)) {
                 // continue
-                sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l);
-                closeLogin();
+                if(sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l)) {
+                    closeLogin();
 
-                sleep(1);
-                gameState = CHALLENGE_STATE;
-                rendered = false;
+                    sleep(1);
+                    gameState = CHALLENGE_STATE;
+                    rendered = false;
 
-                // Fetch and select a game
-                games_count = get_games(sfd_s, games);
-                printf("%d games received.\n", games_count);
-                print_games(games, games_count);
+                    // Fetch and select a game
+                    games_count = get_games(sfd_s, games);
+                    printf("%d games received.\n", games_count);
+                    print_games(games, games_count);
 
-                loadChallengeTexture();
+                    loadChallengeTexture();
+                }
             };
         }
         if (gameState == CHALLENGE_STATE) {

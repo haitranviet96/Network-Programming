@@ -50,6 +50,13 @@
 #define READY 1
 
 /**
+ * \brief	The game is not available.
+ * \details	Player is offline.
+ *
+ */
+#define OFFLINE (-1)
+
+/**
  * \brief	The game is available.
  * \details	A game is available if is has not been joined yet.
  *

@@ -7,7 +7,7 @@
 # include "overall_net.h"
 
 
-void sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen) {
+int sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen) {
 	struct sockaddr_in addr, addr_s, addr_l;
 	int len = sizeof(addr_l);
 	char buff[MAX_REQ];
@@ -32,6 +32,20 @@ void sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen) {
 	// Sending listening socket info
 	sprintf(buff, "LOGIN %s %d", nick, ntohs(addr_l.sin_port)); // HOST <nick> <port> <mode>
 	check(send(*sfd_server, buff, strlen(buff)+1, 0), "Error sending");
+
+    char status[10];
+    char message[50];
+    // Receiving GAME responses
+    while(1) {
+        check(recv(*sfd_server, buff, MAX_REQ, 0), "Error receiving");
+        sscanf(buff, "LOGIN %s %[^\t\n]", status, message);
+        if(strcmp(status,"OK") == 0){
+            return 1;
+        } else if (strcmp(status,"FAILED") == 0){
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Login failed !", message, NULL);
+            return 0;
+        }
+    }
 }
 
 

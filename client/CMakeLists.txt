@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-add_executable(new
+add_executable(client
         main.c
         Battle.h
         Battle.c
@@ -37,4 +37,9 @@ add_executable(new
         Challenge.c
         Challenge.h)
 
-target_link_libraries(new ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} SDL2_ttf SDL2_image)
+add_executable(server
+        ../server/server.c
+        ../server/server.h)
+
+target_link_libraries(client ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} SDL2_ttf SDL2_image)
+TARGET_LINK_LIBRARIES(server pthread)

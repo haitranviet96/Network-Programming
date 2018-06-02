@@ -35,7 +35,7 @@ void draw_squares(int x, int y, int *stats, SDL_Rect *rect) {
         rect[j].y = 24 + 50 * (int) (j / HORIZONTAL_SQUARE);
         rect[j].h = 49;
         rect[j].w = 49;
-        SDL_RenderCopy(renderer, missTexture, NULL, &rect[j]);
+        SDL_SetRenderDrawColor(renderer, 0, 100, 0, 255);
         if (stats[j] == 4) {
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); //??
         } else if (rect[j].x <= x && x <= rect[j].x + rect[j].h && rect[j].y <= y && y <= rect[j].y + rect[j].w) {

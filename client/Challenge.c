@@ -36,14 +36,14 @@ int HOVER_REFRESH_BUTTON = -1;
 int CLICK_REFRESH_BUTTON = -2;
 
 int handleMouseChallenge(int x, int y){
+    if(x > 800 && x < 1000 && y > 28 && y < 76){
+        if(click == NONE_CLICK) return HOVER_REFRESH_BUTTON;
+        else if(click == LEFT_CLICK) return CLICK_REFRESH_BUTTON;
+    }
     for (int i = 0; i < games_count; i++) {
         if(x < ( 40 + 240 * ((i+1) % 4) ) && x > ( 40 + 240 * (i % 4) ) &&
                 y < 95 + 150 * (int) ((i / 4) + 1) && y > 95 + 150 * (int) (i / 4))
             if(click == LEFT_CLICK) return i + 1;
-        if(x > 800 && x < 1000 && y > 28 && y < 76){
-            if(click == NONE_CLICK) return HOVER_REFRESH_BUTTON;
-            else if(click == LEFT_CLICK) return CLICK_REFRESH_BUTTON;
-        }
     }
     return 0;
 };

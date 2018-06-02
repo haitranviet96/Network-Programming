@@ -114,7 +114,7 @@ typedef struct opponent {
  * \param	sfd_server	The dialog socket that will be established with the server
  * \param	sfd_listen	This player's listening socket
  */
-void sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen);
+int sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen);
 
 /**
  * \brief	Fetches the games from the server.
