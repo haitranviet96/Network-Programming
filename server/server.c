@@ -64,8 +64,6 @@ void* routine_thread(void* arg)
 	char buff[MAXBUFF];
 	int sts;
 	char cmd[50];
-	char str[100];
-
 	char addr[50];
 	int port;
 	int mode; // 0. Host 1. Join
@@ -79,6 +77,9 @@ void* routine_thread(void* arg)
 		sscanf(buff,"%s",cmd);
 		printf("%s\n", cmd);
 		printf("Received : %s \n",buff);
+		if(sts == 0) {
+					pthread_exit(NULL);
+		}
 		// Compare the request and execute it
 		if (!strcmp("LOGIN",cmd))
 		{
@@ -90,14 +91,8 @@ void* routine_thread(void* arg)
 			//** TEST **//
 			printf("Name : %s \t Address : %s \t Port : %d \t Host/Player : %d \n",arg_pl->name,inet_ntoa(arg_pl->addr_l
 																											   .sin_addr),ntohs(arg_pl->addr_l.sin_port),arg_pl->mode);
+
 			//** FIN TEST **//
-			int cn = read(arg_pl->sfd, str, 100);
-			printf("GAMEv %d", cn);
-			if(cn == 0) {
-				// shutdown(arg_pl->sfd, SHUT_RDWR);	
-				// exit(1);
-					pthread_exit(NULL);
-			}
 		}
 		else if (!strcmp("GAMES",cmd)) // Scan for games
 		{
@@ -145,5 +140,6 @@ void* routine_thread(void* arg)
 			//** FIN TEST **//
 		}
 	}
+	 
 	pthread_exit(NULL);
 }
