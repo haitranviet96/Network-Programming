@@ -117,7 +117,7 @@ void changeBattleStates(int x, int y) {
             if (square >= 0) {
                 // left click inside battle field
                 if (currentBattleState == PLAYER_TURN) {
-                    if (opponentTableStatusTemp[square] != 'h' || opponentTableStatusTemp[square] != 'm')
+                    if (opponentTableStatus[square] != 'h' && opponentTableStatus[square] != 'm')
                         currentBattleState = PLAYER_HIT;
                 } else if (currentBattleState == OPPONENT_TURN) // just for test
                     currentBattleState = PLAYER_TURN;

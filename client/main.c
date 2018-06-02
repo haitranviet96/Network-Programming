@@ -167,19 +167,20 @@ int main(int argc, char **argv) {
         if (gameState == LOGIN_STATE) {
             if (receiveUserName(&rendered)) {
                 // continue
-                sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l);
-                closeLogin();
+                if(sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l)) {
+                    closeLogin();
 
-                sleep(1);
-                gameState = CHALLENGE_STATE;
-                rendered = false;
+                    sleep(1);
+                    gameState = CHALLENGE_STATE;
+                    rendered = false;
 
-                // Fetch and select a game
-                games_count = get_games(sfd_s, games);
-                printf("%d games received.\n", games_count);
-                print_games(games, games_count);
+                    // Fetch and select a game
+                    games_count = get_games(sfd_s, games);
+                    printf("%d games received.\n", games_count);
+                    print_games(games, games_count);
 
-                loadChallengeTexture();
+                    loadChallengeTexture();
+                }
             };
         }
         if (gameState == CHALLENGE_STATE) {
