@@ -184,7 +184,8 @@ int main(int argc, char **argv) {
         }
         if (gameState == CHALLENGE_STATE) {
             scanChallenge(&x, &y);
-            if (renderListHost(x,y)) {
+            int state = renderListHost(x,y);
+            if (state == 1) {
                 // continue to editor state
 
                 gameState = EDITOR_STATE;
@@ -192,6 +193,8 @@ int main(int argc, char **argv) {
                 loadEditorTexture();
                 rendered = false;
                 click = NONE_CLICK;
+            }else if( state == -2 ){
+                games_count = get_games(sfd_s, games);
             };
         }
         if (gameState == EDITOR_STATE) {

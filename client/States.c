@@ -14,10 +14,13 @@ int getSquare(int x, int y) {
 
 int getEditorState(int x, int y) {
     if (891 <= x && x < 1015 && 40 <= y && y <= 92)
-        return 1; // Selecting ship 1
-    if (891 <= x && x < 1015 && 108 <= y && y <= 162) return 2; // Selecting ship 2
-    if (891 <= x && x < 1015 && 178 <= y && y <= 231) return 3; // Selecting ship 3
-    if (890 <= x && x < 940 && 384 <= y && y < 435) return 4;// Selecting headquarter
+        if (NUMBER_OF_SHIP[1][0] != 0) return 1; // Selecting ship 1
+    if (891 <= x && x < 1015 && 108 <= y && y <= 162)
+        if (NUMBER_OF_SHIP[1][1] != 0) return 2; // Selecting ship 2
+    if (891 <= x && x < 1015 && 178 <= y && y <= 231)
+        if (NUMBER_OF_SHIP[1][2] != 0) return 3; // Selecting ship 3
+    if (890 <= x && x < 940 && 384 <= y && y < 435)
+        if (NUMBER_OF_SHIP[1][3] != 0) return 4;// Selecting headquarter
     if (906 <= x && x < 928 && 307 <= y && y <= 334) return -1; // Remove ship 1
     if (941 <= x && x < 963 && 307 <= y && y <= 334) return -2; // Remove ship 2
     if (976 <= x && x < 998 && 307 <= y && y <= 334) return -3; // Remove ship 3
@@ -34,7 +37,6 @@ void changeEditorStates(int x, int y) {
     }
     if (editState == 1 && click == LEFT_CLICK && getSquare(x, y) >= 0) {
         editState = 10;
-
     } else if (editState == 1 && click == RIGHT_CLICK && getSquare(x, y) >= 0) {
         editState = 11;
     } else if (editState == 11 && click == RIGHT_CLICK && getSquare(x, y) >= 0) {
@@ -114,7 +116,7 @@ void changeBattleStates(int x, int y) {
                 // left click inside battle field
                 if (currentBattleState == PLAYER_TURN)
                     currentBattleState = PLAYER_HIT;
-                else if(currentBattleState == OPPONENT_TURN)
+                else if (currentBattleState == OPPONENT_TURN)
                     currentBattleState = PLAYER_TURN;
             }
             break;
