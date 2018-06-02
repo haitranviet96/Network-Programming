@@ -7,6 +7,10 @@
 
 void scanChallenge(int *x, int *y) {
     switch (event.type) {
+        case SDL_MOUSEMOTION:
+            SDL_GetMouseState(x, y);
+            click = NONE_CLICK;
+            break;
         case SDL_MOUSEBUTTONDOWN:
             SDL_GetMouseState(x, y);
             switch (event.button.button) {
@@ -23,15 +27,23 @@ void scanChallenge(int *x, int *y) {
 }
 
 //// CHALLENGE
-SDL_Texture *textureChallengeBG;
+SDL_Texture *challengeBgTexture;
 SDL_Texture *boxTexture;
+SDL_Texture *refreshBtnTexture;
 SDL_Texture *nameTexture[MAX_NUM_PLAYER];
+
+int HOVER_REFRESH_BUTTON = -1;
+int CLICK_REFRESH_BUTTON = -2;
 
 int handleMouseChallenge(int x, int y){
     for (int i = 0; i < games_count; i++) {
         if(x < ( 40 + 240 * ((i+1) % 4) ) && x > ( 40 + 240 * (i % 4) ) &&
                 y < 95 + 150 * (int) ((i / 4) + 1) && y > 95 + 150 * (int) (i / 4))
-            return i + 1;
+            if(click == LEFT_CLICK) return i + 1;
+        if(x > 800 && x < 1000 && y > 28 && y < 76){
+            if(click == NONE_CLICK) return HOVER_REFRESH_BUTTON;
+            else if(click == LEFT_CLICK) return CLICK_REFRESH_BUTTON;
+        }
     }
     return 0;
 };
@@ -40,11 +52,13 @@ void createNewName() {
     for(int i = 0 ; i < games_count ; i++) {
         SDL_Surface *surfaceName = TTF_RenderText_Blended_Wrapped(boldFont, games[i].name, textColor, 175);
         if (surfaceName != NULL) {
+            if(nameTexture[i] != NULL) SDL_DestroyTexture(nameTexture[i]);
             //Create texture from surface pixels
             nameTexture[i] = SDL_CreateTextureFromSurface(renderer, surfaceName);
             if (nameTexture == NULL) {
                 printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
             }
+            SDL_ShowSimpleMessageBox(, "Error !","", NULL);
             //Get rid of old surface
             SDL_FreeSurface(surfaceName);
         } else {
@@ -60,7 +74,7 @@ void loadChallengeTexture() {
         printf("IMG_Load Error: Error load assets/challenge_bg.png");
         return;
     }
-    textureChallengeBG = SDL_CreateTextureFromSurface(renderer, bgChallengeSurface);
+    challengeBgTexture = SDL_CreateTextureFromSurface(renderer, bgChallengeSurface);
     SDL_FreeSurface(bgChallengeSurface);
 
     // create box texture
@@ -72,18 +86,30 @@ void loadChallengeTexture() {
     boxTexture = SDL_CreateTextureFromSurface(renderer, boxSurface);
     SDL_FreeSurface(boxSurface);
 
+    // create refresh button texture
+    SDL_Surface *refreshBtnSurface = IMG_Load("assets/challenge/refresh_btn_pr.png");
+    if (refreshBtnSurface == NULL) {
+        printf("IMG_Load Error: Error load assets/challenge/refresh_btn_pr.png");
+        return;
+    }
+    refreshBtnTexture = SDL_CreateTextureFromSurface(renderer, refreshBtnSurface);
+    SDL_FreeSurface(refreshBtnSurface);
+
     createNewName();
 };
 
 int renderListHost(int x, int y) {
-    if(handleMouseChallenge(x,y) != 0 ){ // 1 - 12 if click, 0 if nothing happen
+    int state = handleMouseChallenge(x,y);
+    if( state > 0 ){ // 1 - 12 if click, 0 if nothing happen
         return 1;
     }
+
+    createNewName();
 
     SDL_Rect bgRect = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, textureChallengeBG, NULL, &bgRect);
+    SDL_RenderCopy(renderer, challengeBgTexture, NULL, &bgRect);
 
     for (int i = 0; i < MAX_NUM_PLAYER; i++) {
         peopleRect[i].x = 40 + 240 * (i % 4);
@@ -91,18 +117,23 @@ int renderListHost(int x, int y) {
         peopleRect[i].w = 225;
         peopleRect[i].h = 125;
         SDL_RenderCopy(renderer, boxTexture, NULL, &peopleRect[i]);
-        if (i < games_count && strcmp(games[i].name,inputText) != 0) {
+        if (i < games_count) {
             render(nameTexture[i], 40 + 240 * (i % 4) + 25, 95 + 150 * (int) (i / 4) +25
                     , NULL, 0, NULL, SDL_FLIP_NONE);
         }
     }
 
-    return 0;
+    if( state < 0 ){
+        SDL_Rect rectRefreshBtn = {795, 25, 197, 48};
+        SDL_RenderCopy(renderer, refreshBtnTexture, NULL, &rectRefreshBtn);
+    }
+
+    return state;
 }
 
 void closeChallenge() {
-    SDL_DestroyTexture(textureChallengeBG);
-    SDL_DestroyTexture(boxTexture);
+    if(challengeBgTexture != NULL) SDL_DestroyTexture(challengeBgTexture);
+    if(boxTexture != NULL) SDL_DestroyTexture(boxTexture);
     for(int i = 0 ; i < games_count ; i++)
         SDL_DestroyTexture(nameTexture[i]);
 }

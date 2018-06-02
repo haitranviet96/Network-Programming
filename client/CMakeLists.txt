@@ -15,8 +15,6 @@ add_executable(new
         Draw.c
         Editor.h
         Editor.c
-        handlemouseEditor.h
-        handlemouseEditor.c
         Login.h
         Login.c
         Number.h
