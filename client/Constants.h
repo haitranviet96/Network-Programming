@@ -47,8 +47,9 @@ SDL_Event event;
 extern int click;
 extern int gameState;
 extern char* inputText;
-extern int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
-extern int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+extern int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE]; // for offline only
+extern int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+extern int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
 extern int editState;
 enum BATTLESTATE {

@@ -18,7 +18,9 @@ int click;
 int gameState = LOGIN_STATE;
 char *inputText;
 int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
-int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+
+int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
+int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
 int games_count;
 game_t games[MAX_GAMES];
@@ -38,8 +40,6 @@ int main(int argc, char **argv) {
     int y = 0;
     int j = 0;
 
-    int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
-    int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
     FILE *data;
     char c;
 

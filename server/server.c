@@ -25,7 +25,7 @@ void error(const char *msg)
 int main(int argc, char* argv[])
 {
 	// Variable declaration
-	int serv_sock; 
+	int serv_sock;
 	struct sockaddr_in serv_addr;
 	int i = 0;
 	int port = 5000;
@@ -39,10 +39,10 @@ int main(int argc, char* argv[])
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(PORT);
 	memset(&serv_addr.sin_zero, 0, 8);
-	
+
 	// Bind listening socket with this address
 	CHECK( (bind(serv_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr))), "Error : bind" );
-	
+
 	// Listening
 	CHECK(listen(serv_sock, NUM_CONN), "Error : listen");
 
@@ -91,7 +91,6 @@ void* routine_thread(void* arg)
 			//** TEST **//
 			printf("Name : %s \t Address : %s \t Port : %d \t Host/Player : %d \n",arg_pl->name,inet_ntoa(arg_pl->addr_l
 																											   .sin_addr),ntohs(arg_pl->addr_l.sin_port),arg_pl->mode);
-
 			//** FIN TEST **//
 		}
 		else if (!strcmp("GAMES",cmd)) // Scan for games
@@ -99,25 +98,25 @@ void* routine_thread(void* arg)
 			// Informations about the other players
 			for (i=0;i<MAXPLAYER;i++)
 			{
-				if (strlen(player_tab[i].name) != 0 && player_tab[i].status != INGAME)
+				if (strlen(player_tab[i].name) != 0 && player_tab[i].status != INGAME && strcmp(player_tab[i].name,arg_pl->name) != 0)
 				{
 					strcpy(addr,inet_ntoa(player_tab[i].addr_l.sin_addr));
 					sprintf(buff,"GAME %s %s %d %d",player_tab[i].name,addr,ntohs(player_tab[i].addr_l.sin_port),player_tab[i].status);
 					CHECK(send(arg_pl->sfd,buff,strlen(buff)+1,0),"Error : write");
 					CHECK(sts = recv(arg_pl->sfd, buff, MAXBUFF, 0), "Error : read"); //!\\ Synchronize
-					
+
 				}
 			}
 			CHECK(send(arg_pl->sfd,"STOP",strlen("STOP")+1,0),"Error : write");
-		
-			
+
+
 		}
 		else if (!strcmp("JOIN",cmd))
 		{
 			sscanf(buff,"%s %s %s %d",cmd,name,addr,&port);
 			for (i=0;i<MAXPLAYER;i++)
 			{
-				if (strlen(player_tab[i].name) != 0 && player_tab[i].status != INGAME && strcmp(player_tab[i].name,arg_pl->name) != 0)
+				if (strlen(player_tab[i].name) != 0 && player_tab[i].status != INGAME)
 				{
 					player_tab[i].status = READY;
 					player_tab[i].opponent = arg_pl;
@@ -128,11 +127,11 @@ void* routine_thread(void* arg)
 			//** TEST **//
 			printf("%s Status : %d \t %s Status : %d \n",arg_pl->name,arg_pl->status,arg_pl->opponent->name,arg_pl->opponent->status);
 			//** FIN TEST **//
-			// Switch the player to "Ready" status		
+			// Switch the player to "Ready" status
 		}
 		else if (!strcmp("START",cmd))
 		{
-			// Switch the player to "IG" status		
+			// Switch the player to "IG" status
 			arg_pl->status = INGAME;
 			arg_pl->opponent->status = INGAME;
 			//** TEST **//
@@ -140,6 +139,5 @@ void* routine_thread(void* arg)
 			//** FIN TEST **//
 		}
 	}
-	 
 	pthread_exit(NULL);
 }

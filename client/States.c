@@ -100,6 +100,7 @@ enum BATTLESTATE getBattleState(int x, int y) {
 }
 
 void changeBattleStates(int x, int y) {
+    int square;
     switch (click) {
         case NONE_CLICK:
             switch (currentBattleState) {
@@ -112,11 +113,13 @@ void changeBattleStates(int x, int y) {
             }
             break;
         case LEFT_CLICK:
-            if (getSquare(x, y) >= 0) {
+            square = getSquare(x, y);
+            if (square >= 0) {
                 // left click inside battle field
-                if (currentBattleState == PLAYER_TURN)
-                    currentBattleState = PLAYER_HIT;
-                else if (currentBattleState == OPPONENT_TURN)
+                if (currentBattleState == PLAYER_TURN) {
+                    if (opponentTableStatusTemp[square] != 'h' || opponentTableStatusTemp[square] != 'm')
+                        currentBattleState = PLAYER_HIT;
+                } else if (currentBattleState == OPPONENT_TURN) // just for test
                     currentBattleState = PLAYER_TURN;
             }
             break;
