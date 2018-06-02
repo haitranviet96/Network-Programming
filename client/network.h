@@ -92,7 +92,7 @@
  * \brief	Checks that a system call does not fail
  */
 # define check(sts,msg) if((sts) == -1) { \
-	perror(msg); exit(EXIT_FAILURE);}
+	perror(msg);  SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error !",msg, NULL); exit(EXIT_FAILURE);}
 
 // Structures
 

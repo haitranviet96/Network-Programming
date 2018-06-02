@@ -5,9 +5,9 @@
 #include "Constants.h"
 #include "Utils.h"
 
-SDL_Texture* loginBgTexture;
+SDL_Texture *loginBgTexture;
 
-void loadLoginTexture(){
+void loadLoginTexture() {
     // create bg texture
     SDL_Surface *bgSurface = IMG_Load("assets/login_bg.png");
     if (bgSurface == NULL) {
@@ -44,8 +44,12 @@ int receiveUserName(bool *rendered) {
             else if (event.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL) {
                 inputText = SDL_GetClipboardText();
                 renderText = true;
-            } else if (event.key.keysym.sym == SDLK_RETURN && strlen(inputText) >= 6) {
-                return 1;
+            } else if (event.key.keysym.sym == SDLK_RETURN) {
+                if (strlen(inputText) >= 6) {
+                    return 1;
+                } else {
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Error !", "Your name must be longer than 6 characters.", NULL);
+                }
             }
         }
             //Special text input event

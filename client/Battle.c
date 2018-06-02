@@ -3,7 +3,6 @@
 #include <SDL_image.h>
 #include "Constants.h"
 #include "Draw.h"
-#include "handlemouseEditor.h"
 #include "States.h"
 
 enum BATTLESTATE currentBattleState = PLAYER_TURN;
