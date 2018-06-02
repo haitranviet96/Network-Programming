@@ -58,7 +58,6 @@ void createNewName() {
             if (nameTexture == NULL) {
                 printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
             }
-            SDL_ShowSimpleMessageBox(, "Error !","", NULL);
             //Get rid of old surface
             SDL_FreeSurface(surfaceName);
         } else {
