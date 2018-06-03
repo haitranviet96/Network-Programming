@@ -195,7 +195,11 @@ int main(int argc, char **argv) {
             } else if (currentChallengeState == CLICK_REFRESH_BUTTON) {
                 games_count = get_games(sfd_s, games);
             } else if (currentChallengeState == WAITING_RESPOND){
-//                connect_player(games[opponentId],sfd_s);
+                connect_player(games[opponentId], &connected, sfd_s);
+//                send_name(connected.sfd,);
+                printf("Waiting for the host to start the game...\n");
+                wait_start(connected.sfd);
+
             }
         }
         if (gameState == EDITOR_STATE) {

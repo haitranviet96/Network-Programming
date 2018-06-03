@@ -92,6 +92,8 @@ void connect_player(game_t game_p, opponent_t* o, int sfd_s) {
 
 	// Send a JOIN request to the server
 	sprintf(buff, "JOIN %s %s %d", game_p.name, inet_ntoa(game_p.addr.sin_addr), ntohs(game_p.addr.sin_port));
+	printf("You are connected tosss %s\n", game_p.name);
+
 	check(send(sfd_s, buff, strlen(buff)+1, 0), "Error sending");
 }
 
