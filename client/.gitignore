@@ -1,3 +1,4 @@
 .idea
 cmake-build-debug/*
 !cmake-build-debug/assets
+cmake-build-debug/assets/data/map.txt

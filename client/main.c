@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
         if (gameState == LOGIN_STATE) {
             if (receiveUserName(&rendered)) {
                 // continue
-                if(sign_in(inputText,"127.0.0.1",&sfd_s, &sfd_l)) {
+                if (sign_in(inputText, "127.0.0.1", &sfd_s, &sfd_l)) {
                     closeLogin();
 
                     sleep(1);
@@ -185,18 +185,18 @@ int main(int argc, char **argv) {
         }
         if (gameState == CHALLENGE_STATE) {
             scanChallenge(&x, &y);
-            int state = renderListHost(x,y);
-            if (state == 1) {
+            if (renderListHost(x, y)) {
                 // continue to editor state
-
                 gameState = EDITOR_STATE;
                 closeChallenge();
                 loadEditorTexture();
                 rendered = false;
                 click = NONE_CLICK;
-            }else if( state == -2 ){
+            } else if (currentChallengeState == CLICK_REFRESH_BUTTON) {
                 games_count = get_games(sfd_s, games);
-            };
+            } else if (currentChallengeState == WAITING_RESPOND){
+//                connect_player(games[opponentId],sfd_s);
+            }
         }
         if (gameState == EDITOR_STATE) {
             scanEditor(&x, &y);

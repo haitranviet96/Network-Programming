@@ -67,9 +67,11 @@ void disconnectPlayer(struct player *player) {
     }
 };
 
-struct player *searchPlayer(char *name) {
+struct player *searchPlayer(struct player *pler) {
     for (int i = 0; i < MAXPLAYER; ++i) {
-        if (strcmp(name, player_tab[i].name) == 0)
+        if (strcmp(pler->name, player_tab[i].name) == 0 &&
+            ((pler->addr_d.sin_addr.s_addr != player_tab[i].addr_d.sin_addr.s_addr) ||
+             (pler->addr_d.sin_port != player_tab[i].addr_d.sin_port)))
             return &player_tab[i];
     }
 
@@ -104,7 +106,7 @@ void *routine_thread(void *arg) {
             // Informations about the player
             sscanf(buff, "LOGIN %s %d %d", arg_pl->name, &port, &mode);
 
-            struct player *temp = searchPlayer(arg_pl->name);
+            struct player *temp = searchPlayer(arg_pl);
             if (temp != NULL) {
                 if (temp->status != OFFLINE &&
                     ((temp->addr_d.sin_addr.s_addr != arg_pl->addr_d.sin_addr.s_addr) ||
@@ -122,6 +124,7 @@ void *routine_thread(void *arg) {
                     temp->addr_d = arg_pl->addr_d;
                     temp->addr_len = arg_pl->addr_len;
                     temp->status = arg_pl->status;
+                    arg_pl->status = OFFLINE;
                     arg_pl = temp;
                 }
             }
@@ -137,7 +140,7 @@ void *routine_thread(void *arg) {
             //** FIN TEST **//
         } else if (!strcmp("GAMES", cmd)) // Scan for games
         {
-            // Informations about the other players
+            // Information about the other players
             for (i = 0; i < MAXPLAYER; i++) {
                 if (strlen(player_tab[i].name) != 0 && player_tab[i].status == AVAILABLE &&
                     strcmp(player_tab[i].name, arg_pl->name) != 0) {

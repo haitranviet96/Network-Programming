@@ -61,8 +61,18 @@ extern enum BATTLESTATE currentBattleState;
 extern SDL_Texture* explodeTexture;
 extern SDL_Texture* missTexture;
 
+// state of challenge screen
+enum CHALLENGESTATE {
+    HOVER_REFRESH_BUTTON,  // hovering refresh button
+    CLICK_REFRESH_BUTTON,  // click refresh button
+    WAITING_RESPOND,       // waiting for respond of opponent
+    CHALLENGING,
+    CHALLENGED,
+};
+extern enum CHALLENGESTATE currentChallengeState;
+extern int opponentId;
+
 SDL_Rect gameTable[NUMBER_OF_SQUARE];
-SDL_Rect peopleRect[MAX_NUM_PLAYER];
 extern game_t games[MAX_GAMES];
 extern int games_count;
 
