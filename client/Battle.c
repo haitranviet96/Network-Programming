@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "Draw.h"
 #include "States.h"
+#include "Challenge.h"
 
 enum BATTLESTATE currentBattleState = PLAYER_TURN;
 
@@ -68,7 +69,7 @@ int battle(int x, int y, int *playerTableStatus, int *opponentTableStatus) {
 
     int w, h;
 
-    int xCoor, yCoor;
+    int fireStatus;
     int squareHit = getSquare(x, y);
 
     switch (currentBattleState) {
@@ -86,19 +87,77 @@ int battle(int x, int y, int *playerTableStatus, int *opponentTableStatus) {
             break;
         case PLAYER_HIT:
             // GO-TO send to server the coordinate of hit
-            xCoor = squareHit % 17;
-            yCoor = squareHit / 17;
-            if (opponentTableStatusTemp[squareHit] != 0) {
-                opponentTableStatus[squareHit] = 'h';
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hit !",
-                                         "You have hit opponent's ship !", NULL);
-                currentBattleState = PLAYER_TURN;
-            } else {
-                opponentTableStatus[squareHit] = 'm';
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Miss !",
-                                         "You have missed !", NULL);
-                currentBattleState = OPPONENT_TURN;
+            target.column = squareHit % 17;
+            target.row = squareHit / 17 ;
+            char message[50];
+            fireStatus = sendFire(sfd,message);
+
+            switch (fireStatus){
+                case 1: // Hit
+                    opponentTableStatus[squareHit] = 'h';
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hit !",
+                                             "You have hit opponent's ship !", NULL);
+                    currentBattleState = PLAYER_TURN;
+                    break;
+                case 0: // Miss
+                    opponentTableStatus[squareHit] = 'm';
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Miss !",
+                                             "You have missed !", NULL);
+                    currentBattleState = OPPONENT_TURN;
+
+                    target.column = -1;
+                    target.row = -1;
+
+                    SDL_Thread* joinThread;
+                    joinThread = SDL_CreateThread(waitFire, "hitThread", NULL);
+                    if (NULL == joinThread) {
+                        printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
+                    }
+                    break;
+                case 2: // End
+                    currentBattleState = GAME_END;
+                    const SDL_MessageBoxButtonData buttons[] = {
+                            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Continue"},
+                            {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Quit"},
+                    };
+                    const SDL_MessageBoxData messageboxdata = {
+                            SDL_MESSAGEBOX_INFORMATION, /* .flags */
+                            NULL, /* .window */
+                            "Game End", /* .title */
+                            message, /* .message */
+                            SDL_arraysize(buttons), /* .numbuttons */
+                            buttons, /* .buttons */
+                            NULL /* .colorScheme */
+                    };
+                    int buttonid;
+                    if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+                        SDL_Log("error displaying message box");
+                    }
+                    if (buttonid == -1) {
+                        SDL_Log("no selection");
+                    } else {
+                        SDL_Log("selection was %s", buttons[buttonid].text);
+                        if(!strcmp(buttons[buttonid].text,"Continue")){
+                            gameState = CHALLENGE_STATE;
+                        }else{
+                            quit = true;
+                        };
+                    }
+                    break;
+                default:break;
             }
+
+//            if (opponentTableStatusTemp[squareHit] != 0) {
+//                opponentTableStatus[squareHit] = 'h';
+//                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hit !",
+//                                         "You have hit opponent's ship !", NULL);
+//                currentBattleState = PLAYER_TURN;
+//            } else {
+//                opponentTableStatus[squareHit] = 'm';
+//                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Miss !",
+//                                         "You have missed !", NULL);
+//                currentBattleState = OPPONENT_TURN;
+//            }
             draw_squares(x, y, playerTableStatus, gameTable);
             break;
         default:

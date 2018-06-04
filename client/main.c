@@ -14,6 +14,22 @@
 #include "overall_net.h"
 #include "Challenge.h"
 
+bool quit = false;
+
+// battleship game
+Coordinate target;                         // x, y value of a target
+Stats players[2] = {{0, 0}, {0, 0}};
+int sunkShip[2][NUM_OF_SHIPS] = {{4, 4, 4, 6, 6, 2, 2, 1},
+                                 {4, 4, 4, 6, 6, 2, 2, 1}};  /* tracks parts of the ship destroyed */
+WaterCraft ship[NUM_OF_SHIPS] = {{'l', 4, "Long ship"},
+                                 {'l', 4, "Long ship"},
+                                 {'l', 4, "Long ship"},
+                                 {'s', 6, "Submarine"},
+                                 {'s', 6, "Submarine"},
+                                 {'c', 2, "Cruiser"},
+                                 {'c', 2, "Cruiser"},
+                                 {'h', 1, "Headquater"}};
+
 int click;
 int gameState = LOGIN_STATE;
 char *inputText;
@@ -27,18 +43,23 @@ game_t games[MAX_GAMES];
 
 int hostOrJoin();
 
-int joinLoop(void *d);
+int hostLoop(void *d) ;
 
-int hostLoop(void *d);
+int joinLoop(void *d) ;
 
+int waitFire(void *d) ;
+
+int sfd;//!< Dialog socket file descriptor between players
 int sfd_s, sfd_l; // s: server, l: listening
 int mode;
 
 int main(int argc, char **argv) {
     // client server connect
     opponent_t connected;
-    SDL_Thread *joinThread;
-    SDL_Thread *hostThread;
+    SDL_Thread *joinThread = NULL;
+    SDL_Thread *hostThread = NULL;
+    target.column = -1;
+    target.row = -1;
 
     // rendered or not
     bool rendered = false;
@@ -231,15 +252,65 @@ int main(int argc, char **argv) {
             }
         }
         if (gameState == EDITOR_STATE) {
+            sfd = connected.sfd; // Make the created socket file descriptor global
             scanEditor(&x, &y);
             if (layoutEditor(x, y, playerTableStatus)) {
                 gameState = BATTLE_STATE;
                 destroyEditorTexture();
                 loadBattleTexture();
+                if (mode) { // join player
+                    currentBattleState = OPPONENT_TURN;
+                    target.row = -1;
+                    target.column = -1;
+
+                    joinThread = SDL_CreateThread(waitFire, "hitThread", (void *) &connected);
+                    if (NULL == joinThread) {
+                        printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
+                    }
+                } else { // host player
+                    currentBattleState = PLAYER_TURN;
+                }
             }
         }
         if (gameState == BATTLE_STATE) {
             scanBattle(&x, &y);
+            if (currentBattleState == OPPONENT_TURN) {
+                if (target.row >= 0 && target.column >= 0) { // receive Fire and return hit or miss
+                    char message[50];
+                    char cmd[10];
+
+                    if (checkShot(playerOneGameBoard, target)) { // HIT
+                        players[1].numHits++;
+                        if (checkSunkShip(sunkShip, 0, playerOneGameBoard[target.row][target.column].symbol,message)) {
+                            //Check winner
+                            if (isWinner(players, sunkShip, 1)) {
+                                printf("\n> Player %s wins!\n", games[opponentId].name);
+                                sprintf(message,"> Player %s wins!", games[opponentId].name);
+                                currentBattleState = GAME_END;
+                                sprintf(cmd, "END");
+                            } else sprintf(cmd, "SINK");
+                        }
+
+                        if(currentBattleState != GAME_END) {
+                            updateGameBoard(playerOneGameBoard, target);
+                            currentBattleState = OPPONENT_TURN;
+                            target.column = -1;
+                            target.row = -1;
+                            joinThread = SDL_CreateThread(waitFire, "hitThread", (void *) &connected);
+                            if (NULL == joinThread) {
+                                printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
+                            }
+                            sprintf(cmd, "HIT");
+                            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hit!", "You have been hit! Your opponent can fire again :(", NULL);
+                        }
+                    } else { // MISS
+                        sprintf(cmd, "MISS");
+                        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Miss!", "Your turn to revenge!", NULL);
+                        currentBattleState = PLAYER_TURN;
+                    };
+                    returnFire(sfd,cmd,message);
+                }
+            }
             if (battle(x, y, playerTableStatus, opponentTableStatus)) {
                 gameState = CHALLENGE_STATE;
                 destroyBattleTexture();
@@ -326,4 +397,11 @@ int hostLoop(void *d) {
     gameState = EDITOR_STATE;
 
     return 0;
+}
+
+int waitFire(void *d) {
+    char buff[MAX_REQ];
+    printf("Waiting for the fire of opponent...\n");
+    check(recv(sfd, buff, MAX_REQ, 0), "Error receiveing");
+    sscanf(buff, "FIRE %d %d", &(target.column), &(target.row));
 }

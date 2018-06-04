@@ -78,8 +78,8 @@
 /**
  * \brief	Checks that a system call does not fail
  */
-# define check(sts,msg) if((sts) == -1) { \
-	perror(msg); SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Error !", msg, NULL); exit(EXIT_FAILURE);}
+# define check(sts, msg) if((sts) == -1) { \
+    perror(msg); SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Error !", msg, NULL); exit(EXIT_FAILURE);}
 
 // Structures
 
@@ -88,9 +88,9 @@
  * \details	A game is an entry in the game list, seen when you want to join on from the "Join" menu.
  */
 typedef struct game {
-	char name[MAX_NAME];//!< Name of the opponent
-	struct sockaddr_in addr;//!< The host's listening socket IP address
-	int status;//!< The game current status
+    char name[MAX_NAME];//!< Name of the opponent
+    struct sockaddr_in addr;//!< The host's listening socket IP address
+    int status;//!< The game current status
 } game_t;
 
 /**
@@ -98,10 +98,10 @@ typedef struct game {
  * \details	An opponent variable describes the opponent and the way to get through to them.
  */
 typedef struct opponent {
-	int sfd;//!< The opponent's dialog socket file descriptor
-	struct sockaddr_in addr;//!< The opponent's dialog socket IP address
-	int addr_len;//!< The opponent's dialog socket address length
-	char name[MAX_NAME];//!< The opponent's name.
+    int sfd;//!< The opponent's dialog socket file descriptor
+    struct sockaddr_in addr;//!< The opponent's dialog socket IP address
+    int addr_len;//!< The opponent's dialog socket address length
+    char name[MAX_NAME];//!< The opponent's name.
 } opponent_t;
 
 // Prototypes
@@ -114,7 +114,7 @@ typedef struct opponent {
  * \param	sfd_server	The dialog socket that will be established with the server
  * \param	sfd_listen	This player's listening socket
  */
-int sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen, int mode);
+int sign_in(char *nick, char *addr_str, int *sfd_server, int *sfd_listen, int mode);
 
 /**
  * \brief	Fetches the games from the server.
@@ -141,7 +141,7 @@ void print_games(game_t tab_p[], int n);
  * \param	sfd_s	The server dialog socket file descriptor.
  * \return	A file descriptor to the newly-created socket.
  */
-void connect_player(game_t game_p, opponent_t* o, int sfd_s);
+void connect_player(game_t game_p, opponent_t *o, int sfd_s);
 
 /**
  * \brief	Waits for an opponent to connect.
@@ -150,7 +150,7 @@ void connect_player(game_t game_p, opponent_t* o, int sfd_s);
  * \param	opponent_p	A pointer to the opponent to fill
  * \return	A file descriptor to the newly-created socket.
  */
-void accept_player(int sfd_l, opponent_t* opponent_p);
+void accept_player(int sfd_l, opponent_t *opponent_p);
 
 /**
  * \brief	Sends the player's name to the host.
@@ -158,14 +158,14 @@ void accept_player(int sfd_l, opponent_t* opponent_p);
  * \param	sfd_p	The host socket file descriptor
  * \param	name_p	The name to send
  */
-void send_name(int sfd_p, char* name_p);
+void send_name(int sfd_p, char *name_p);
 
 /**
  * \brief	Waits for the joining player to send their name.
  * \details	Waits to receive a `NAME` request.
  * \param	opponent_p	Opponent whose name is expected to be received.
  */
-void wait_name(opponent_t* opponent_p);
+void wait_name(opponent_t *opponent_p);
 
 /**
  * \brief	Signals that the game has started.
@@ -181,5 +181,9 @@ void send_start(int sfd_s, opponent_t o);
  * \param	sfd_o	The socket on which to listen for the request
  */
 void wait_start(int sfd_o);
+
+int sendFire(int sfd_o, char *message);
+
+int returnFire(int sfd_o,char* cmd, char *message);
 
 # endif
