@@ -71,6 +71,7 @@ enum CHALLENGESTATE {
 };
 extern enum CHALLENGESTATE currentChallengeState;
 extern int opponentId;
+extern int mode; // host = 0, join = 1
 
 SDL_Rect gameTable[NUMBER_OF_SQUARE];
 extern game_t games[MAX_GAMES];

@@ -25,10 +25,20 @@ int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 int games_count;
 game_t games[MAX_GAMES];
 
+int hostOrJoin();
+
+int joinLoop(void *d);
+
+int hostLoop(void *d);
+
+int sfd_s, sfd_l; // s: server, l: listening
+int mode;
+
 int main(int argc, char **argv) {
     // client server connect
-    int sfd_s, sfd_l; // s: server, l: listening
     opponent_t connected;
+    SDL_Thread *joinThread;
+    SDL_Thread *hostThread;
 
     // rendered or not
     bool rendered = false;
@@ -97,6 +107,7 @@ int main(int argc, char **argv) {
     }
 
     loadLoginTexture();
+    loadEditorTexture();
 
     ////////DATA
     data = fopen("assets/data/data.txt", "r+");
@@ -166,8 +177,10 @@ int main(int argc, char **argv) {
 
         if (gameState == LOGIN_STATE) {
             if (receiveUserName(&rendered)) {
+                mode = hostOrJoin(); // 0 = host, 1 = join
+
                 // continue
-                if (sign_in(inputText, "127.0.0.1", &sfd_s, &sfd_l)) {
+                if (sign_in(inputText, "127.0.0.1", &sfd_s, &sfd_l, mode)) {
                     closeLogin();
 
                     sleep(1);
@@ -178,24 +191,43 @@ int main(int argc, char **argv) {
                     games_count = get_games(sfd_s, games);
                     printf("%d games received.\n", games_count);
                     print_games(games, games_count);
-
+                    if (!mode) { // Host  player
+//                        int threadReturnValue;
+                        hostThread = SDL_CreateThread(hostLoop, "hostThread", (void *) &connected);
+                        if (NULL == hostThread) {
+                            printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
+                        }
+//                        else {
+//                            SDL_WaitThread(thread, &threadReturnValue);
+//                            printf("\nThread returned value: %d", threadReturnValue);
+//                        }
+                        printf("Waiting for an opponent to connect...\n");
+                    }
                     loadChallengeTexture();
+                    loadEditorTexture();
                 }
             };
         }
         if (gameState == CHALLENGE_STATE) {
             scanChallenge(&x, &y);
             if (renderListHost(x, y)) {
-                // continue to editor state
-                gameState = EDITOR_STATE;
-                closeChallenge();
-                loadEditorTexture();
-                rendered = false;
-                click = NONE_CLICK;
+
             } else if (currentChallengeState == CLICK_REFRESH_BUTTON) {
                 games_count = get_games(sfd_s, games);
-            } else if (currentChallengeState == WAITING_RESPOND){
-//                connect_player(games[opponentId],sfd_s);
+            } else if (currentChallengeState == WAITING_RESPOND) {
+                if (mode) {
+                    if (joinThread == NULL) {
+//                    int threadReturnValue;
+                        joinThread = SDL_CreateThread(joinLoop, "waitThread", (void *) &connected);
+                        if (NULL == joinThread) {
+                            printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
+                        }
+//                    else {
+//                        SDL_WaitThread(thread, &threadReturnValue);
+//                        printf("\nThread returned value: %d", threadReturnValue);
+//                    }
+                    }
+                }
             }
         }
         if (gameState == EDITOR_STATE) {
@@ -232,6 +264,66 @@ int main(int argc, char **argv) {
     TTF_Quit();
 
     SDL_Quit();
+
+    return 0;
+}
+
+int hostOrJoin() {
+    const SDL_MessageBoxButtonData buttons[] = {
+            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Host"},
+            {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Join"},
+    };
+    const SDL_MessageBoxData messageboxdata = {
+            SDL_MESSAGEBOX_INFORMATION, /* .flags */
+            NULL, /* .window */
+            "Host or Join", /* .title */
+            "Please choose to host or join a game", /* .message */
+            SDL_arraysize(buttons), /* .numbuttons */
+            buttons, /* .buttons */
+            NULL /* .colorScheme */
+    };
+    int buttonid;
+    if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+        SDL_Log("error displaying message box");
+    }
+    if (buttonid == -1) {
+        SDL_Log("no selection");
+    } else {
+        SDL_Log("selection was %s", buttons[buttonid].text);
+    }
+
+    return strcmp(buttons[buttonid].text, "Host");
+}
+
+int joinLoop(void *d) {
+    opponent_t *connected = (opponent_t *) d;
+    connect_player(games[opponentId], connected, sfd_s);
+    send_name(connected->sfd, inputText);
+    printf("Waiting for the host to start the game...\n");
+    wait_start(connected->sfd);
+    printf("Game starts!\n");
+
+    // continue to editor state
+    closeChallenge();
+    gameState = EDITOR_STATE;
+    click = NONE_CLICK;
+
+    return 0;
+}
+
+int hostLoop(void *d) {
+    opponent_t *connected = (opponent_t *) d;
+    accept_player(sfd_l, connected);
+    wait_name(connected);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Notification", "You have a Challenger", NULL);
+
+    send_start(sfd_s, *connected);
+    printf("Game starts!\n");
+
+    // continue to editor state
+    closeChallenge();
+    click = NONE_CLICK;
+    gameState = EDITOR_STATE;
 
     return 0;
 }
