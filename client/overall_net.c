@@ -7,7 +7,7 @@
 # include "overall_net.h"
 
 
-int sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen) {
+int sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen, int mode) {
 	struct sockaddr_in addr, addr_s, addr_l;
 	int len = sizeof(addr_l);
 	char buff[MAX_REQ];
@@ -30,7 +30,7 @@ int sign_in(char* nick, char* addr_str, int* sfd_server, int* sfd_listen) {
 	check(connect(*sfd_server, (struct sockaddr*)&addr_s, sizeof(addr_s)), "Error connecting");
 
 	// Sending listening socket info
-	sprintf(buff, "LOGIN %s %d", nick, ntohs(addr_l.sin_port)); // HOST <nick> <port> <mode>
+	sprintf(buff, "LOGIN %s %d %d", nick, ntohs(addr_l.sin_port), mode); // HOST <nick> <port> <mode>
 	check(send(*sfd_server, buff, strlen(buff)+1, 0), "Error sending");
 
     char status[10];
@@ -92,8 +92,6 @@ void connect_player(game_t game_p, opponent_t* o, int sfd_s) {
 
 	// Send a JOIN request to the server
 	sprintf(buff, "JOIN %s %s %d", game_p.name, inet_ntoa(game_p.addr.sin_addr), ntohs(game_p.addr.sin_port));
-	printf("You are connected tosss %s\n", game_p.name);
-
 	check(send(sfd_s, buff, strlen(buff)+1, 0), "Error sending");
 }
 

@@ -33,7 +33,7 @@ SDL_Rect peopleRect[MAX_NUM_PLAYER];
 //// CHALLENGE
 SDL_Texture *challengeBgTexture;
 SDL_Texture *boxTexture;
-SDL_Texture *refreshBtnTexture;
+SDL_Texture *refreshButtonTexture;
 SDL_Texture *waitingTextTexture;
 SDL_Texture *nameTexture[MAX_NUM_PLAYER];
 int opponentId;
@@ -101,7 +101,7 @@ void loadChallengeTexture() {
         printf("IMG_Load Error: Error load assets/challenge/refresh_btn_pr.png");
         return;
     }
-    refreshBtnTexture = SDL_CreateTextureFromSurface(renderer, refreshBtnSurface);
+    refreshButtonTexture = SDL_CreateTextureFromSurface(renderer, refreshBtnSurface);
     SDL_FreeSurface(refreshBtnSurface);
 
     SDL_Surface *surfaceWait = TTF_RenderText_Blended_Wrapped(regularFont, "Waiting for respond...", textColor, 175);
@@ -145,7 +145,7 @@ int renderListHost(int x, int y) {
 
     if (currentChallengeState == HOVER_REFRESH_BUTTON || currentChallengeState == CLICK_REFRESH_BUTTON) {
         SDL_Rect rectRefreshBtn = {795, 25, 197, 48};
-        SDL_RenderCopy(renderer, refreshBtnTexture, NULL, &rectRefreshBtn);
+        SDL_RenderCopy(renderer, refreshButtonTexture, NULL, &rectRefreshBtn);
     }
 
     if (currentChallengeState == WAITING_RESPOND)

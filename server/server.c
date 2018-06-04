@@ -142,7 +142,7 @@ void *routine_thread(void *arg) {
         {
             // Information about the other players
             for (i = 0; i < MAXPLAYER; i++) {
-                if (strlen(player_tab[i].name) != 0 && player_tab[i].status == AVAILABLE &&
+                if (player_tab[i].mode == 0 && strlen(player_tab[i].name) != 0 && player_tab[i].status == AVAILABLE &&
                     strcmp(player_tab[i].name, arg_pl->name) != 0) {
                     strcpy(addr, inet_ntoa(player_tab[i].addr_l.sin_addr));
                     sprintf(buff, "GAME %s %s %d %d", player_tab[i].name, addr, ntohs(player_tab[i].addr_l.sin_port),
