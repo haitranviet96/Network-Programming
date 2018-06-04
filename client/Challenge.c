@@ -51,8 +51,12 @@ void handleMouseChallenge(int x, int y) {
         if (x < (40 + 240 * ((i + 1) % 4)) && x > (40 + 240 * (i % 4)) &&
             y < 95 + 150 * (int) ((i / 4) + 1) && y > 95 + 150 * (int) (i / 4)) {
             if (click == LEFT_CLICK) {
-                opponentId = i;
-                currentChallengeState = WAITING_RESPOND;
+                if (mode) { // only join can join, host cannot join
+                    opponentId = i;
+                    currentChallengeState = WAITING_RESPOND;
+                } else {
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Notice", "Only Join-Player can join.", NULL);
+                }
             }
         }
     }
