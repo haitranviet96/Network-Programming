@@ -9,4 +9,5 @@ void loadBattleTexture();
 
 void destroyBattleTexture();
 
+void endGameMessage(const char* message);
 #endif

@@ -264,6 +264,9 @@ int layoutEditor(int x, int y, int *tableStatus) {
                     fprintf(file, "%d\t", tableStatus[i]);
             }
             fclose(file);
+            initializeGameBoard(playerOneGameBoard);
+            placeGameBoard(playerOneGameBoard,ship,tableStatus);
+            printGameBoard(playerOneGameBoard,TRUE);
             return 1;
         }
     }

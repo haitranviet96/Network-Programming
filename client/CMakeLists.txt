@@ -35,7 +35,9 @@ add_executable(client
         overall_net.c
         overall_net.h
         Challenge.c
-        Challenge.h)
+        Challenge.h
+        battleship.c
+        battleship.h)
 
 add_executable(server
         ../server/server.c

@@ -55,7 +55,7 @@ void handleMouseChallenge(int x, int y) {
                     opponentId = i;
                     currentChallengeState = WAITING_RESPOND;
                 } else {
-                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Notice", "Only Join-Player can join.", NULL);
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Notice", "Only Join-Player can join.", window);
                 }
             }
         }

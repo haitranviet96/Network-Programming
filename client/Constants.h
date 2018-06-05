@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 #include <stdbool.h>
 #include "overall_net.h"
+#include "battleship.h"
 
 #define NONE_CLICK (-1)
 #define LEFT_CLICK 0
@@ -31,7 +32,7 @@
 #define WINDOW_HEIGHT 576
 
 // variables
-static bool quit = false;
+extern bool quit;
 
 static const SDL_Color textColor = {0x00, 0x00, 0x00, 0xFF};
 
@@ -47,7 +48,7 @@ SDL_Event event;
 extern int click;
 extern int gameState;
 extern char* inputText;
-extern int opponentTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE]; // for offline only
+extern int playerTableStatusTemp[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 extern int playerTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 extern int opponentTableStatus[HORIZONTAL_SQUARE * VERTICAL_SQUARE];
 
@@ -56,6 +57,7 @@ enum BATTLESTATE {
     PLAYER_TURN,
     PLAYER_HIT,
     OPPONENT_TURN,
+    GAME_END,
 };
 extern enum BATTLESTATE currentBattleState;
 extern SDL_Texture* explodeTexture;
@@ -72,6 +74,15 @@ enum CHALLENGESTATE {
 extern enum CHALLENGESTATE currentChallengeState;
 extern int opponentId;
 extern int mode; // host = 0, join = 1
+extern int sfd;//!< Dialog socket file descriptor between players
+extern int sfd_s, sfd_l; // s: server, l: listening
+
+// battleship game
+Cell playerOneGameBoard[VERTICAL_SQUARE][HORIZONTAL_SQUARE];       //P1 game board
+extern Coordinate target;                         // x, y value of a target
+extern int sunkShip[2][NUM_OF_SHIPS];  /* tracks parts of the ship destroyed */
+extern WaterCraft ship[NUM_OF_SHIPS];
+extern Stats players[2];        //initialize stats for 2 players
 
 SDL_Rect gameTable[NUMBER_OF_SQUARE];
 extern game_t games[MAX_GAMES];
@@ -82,5 +93,14 @@ static struct timeval startTime, now;
 TTF_Font* boldFont;
 TTF_Font* regularFont;
 SDL_Texture* gInputTextTexture;
+
+// thread
+extern int hostOrJoin();
+
+extern int hostLoop(void *d) ;
+
+extern int joinLoop(void *d) ;
+
+extern int waitFire(void *d) ;
 
 #endif
