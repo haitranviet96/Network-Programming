@@ -59,6 +59,50 @@ void scanBattle(int *x, int *y) {
     changeBattleStates(*x, *y);
 }
 
+void destroyBattleTexture() {
+    SDL_DestroyTexture(textureBattleBG);
+    SDL_DestroyTexture(opponentTurnInstrTexture);
+    SDL_DestroyTexture(playerTurnInstrTexture);
+    SDL_DestroyTexture(explodeTexture);
+    SDL_DestroyTexture(missTexture);
+}
+
+void endGameMessage(const char *message) {
+//    const SDL_MessageBoxButtonData buttons[] = {
+//            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Continue"},
+//            {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Quit"},
+//    };
+//    const SDL_MessageBoxData messageboxdata = {
+//            SDL_MESSAGEBOX_INFORMATION, /* .flags */
+//            window, /* .window */
+//            "Game End", /* .title */
+//            message, /* .message */
+//            SDL_arraysize(buttons), /* .numbuttons */
+//            buttons, /* .buttons */
+//            NULL /* .colorScheme */
+//    };
+//    int buttonid;
+//    if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+//        SDL_Log("error displaying message box");
+//    }
+//    if (buttonid == -1) {
+//        SDL_Log("no selection");
+//    } else {
+//        SDL_Log("selection was %s", buttons[buttonid].text);
+//        if (!strcmp(buttons[buttonid].text, "Continue")) {
+//            gameState = CHALLENGE_STATE;
+//            destroyBattleTexture();
+//            loadChallengeTexture();
+//            click = NONE_CLICK;
+//        } else {
+//            quit = true;
+//        };
+//    }
+
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Game End",message,window);
+    quit = true;
+}
+
 int battle(int x, int y, int *playerTableStatus, int *opponentTableStatus) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 55, 55);
 
@@ -88,27 +132,28 @@ int battle(int x, int y, int *playerTableStatus, int *opponentTableStatus) {
         case PLAYER_HIT:
             // GO-TO send to server the coordinate of hit
             target.column = squareHit % 17;
-            target.row = squareHit / 17 ;
-            char message[50];
-            fireStatus = sendFire(sfd,message);
+            target.row = squareHit / 17;
+            char message[100] = "";
+            fireStatus = sendFire(sfd, message);
 
-            switch (fireStatus){
+            switch (fireStatus) {
                 case 1: // Hit
+                    players[0].numHits++;
                     opponentTableStatus[squareHit] = 'h';
-                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hit !",
-                                             "You have hit opponent's ship !", NULL);
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hit !","You have hit opponent's ship !", window);
                     currentBattleState = PLAYER_TURN;
                     break;
                 case 0: // Miss
+                    players[0].numMisses++;
                     opponentTableStatus[squareHit] = 'm';
                     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Miss !",
-                                             "You have missed !", NULL);
+                                             "You have missed !", window);
                     currentBattleState = OPPONENT_TURN;
 
                     target.column = -1;
                     target.row = -1;
 
-                    SDL_Thread* joinThread;
+                    SDL_Thread *joinThread;
                     joinThread = SDL_CreateThread(waitFire, "hitThread", NULL);
                     if (NULL == joinThread) {
                         printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
@@ -116,38 +161,14 @@ int battle(int x, int y, int *playerTableStatus, int *opponentTableStatus) {
                     break;
                 case 2: // End
                     currentBattleState = GAME_END;
-                    const SDL_MessageBoxButtonData buttons[] = {
-                            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Continue"},
-                            {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Quit"},
-                    };
-                    const SDL_MessageBoxData messageboxdata = {
-                            SDL_MESSAGEBOX_INFORMATION, /* .flags */
-                            NULL, /* .window */
-                            "Game End", /* .title */
-                            message, /* .message */
-                            SDL_arraysize(buttons), /* .numbuttons */
-                            buttons, /* .buttons */
-                            NULL /* .colorScheme */
-                    };
-                    int buttonid;
-                    if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
-                        SDL_Log("error displaying message box");
-                    }
-                    if (buttonid == -1) {
-                        SDL_Log("no selection");
-                    } else {
-                        SDL_Log("selection was %s", buttons[buttonid].text);
-                        if(!strcmp(buttons[buttonid].text,"Continue")){
-                            gameState = CHALLENGE_STATE;
-                        }else{
-                            quit = true;
-                        };
-                    }
+                    sprintf(message + strlen(message), "You won!");
+                    endGameMessage(message);
                     break;
-                default:break;
+                default:
+                    break;
             }
 
-//            if (opponentTableStatusTemp[squareHit] != 0) {
+//            if (playerTableStatusTemp[squareHit] != 0) {
 //                opponentTableStatus[squareHit] = 'h';
 //                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hit !",
 //                                         "You have hit opponent's ship !", NULL);
@@ -226,10 +247,3 @@ void loadBattleTexture() {
     }
 }
 
-void destroyBattleTexture() {
-    SDL_DestroyTexture(textureBattleBG);
-    SDL_DestroyTexture(opponentTurnInstrTexture);
-    SDL_DestroyTexture(playerTurnInstrTexture);
-    SDL_DestroyTexture(explodeTexture);
-    SDL_DestroyTexture(missTexture);
-}

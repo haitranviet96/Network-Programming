@@ -48,7 +48,7 @@ int receiveUserName(bool *rendered) {
                 if (strlen(inputText) >= 6) {
                     return 1;
                 } else {
-                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Error !", "Your name must be longer than 6 characters.", NULL);
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Error !", "Your name must be longer than 6 characters.", window);
                 }
             }
         }

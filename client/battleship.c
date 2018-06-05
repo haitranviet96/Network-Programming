@@ -155,29 +155,29 @@ Boolean checkSunkShip(int sunkShip[][NUM_OF_SHIPS], int player, char shipSymbol,
 
     switch (shipSymbol) {
         case LONGSHIP:
-            if (--sunkShip[player][0] == 0 || --sunkShip[player][1] == 0 || --sunkShip[player][2] == 0) {
-                sprintf(message,"> Player %s's Long ship sunked!\n", inputText);
+            if (--sunkShip[player][0] == 0 && --sunkShip[player][1] == 0 && --sunkShip[player][2] == 0) {
+                sprintf(message,"Player %s's Long ship sunked! ", inputText);
                 sunked = TRUE;
             }
             break;
 
         case SUBMARINE:
             if (--sunkShip[player][3] == 0 || --sunkShip[player][4] == 0) {
-                sprintf(message,"> Player %s's Submarine sunked!\n", inputText);
+                sprintf(message,"Player %s's Submarine sunked! ", inputText);
                 sunked = TRUE;
             }
             break;
 
         case CRUISER:
             if (--sunkShip[player][5] == 0 || --sunkShip[player][6] == 0) {
-                sprintf(message,"> Player %s's Cruiser sunked!\n", inputText);
+                sprintf(message,"Player %s's Cruiser sunked! ", inputText);
                 sunked = TRUE;
             }
             break;
 
         case HEADQUATER:
             if (--sunkShip[player][7] == 0) {
-                sprintf(message,"> Player %s's Headquater sunked!\n",inputText);
+                sprintf(message,"Player %s's Headquater sunked! ",inputText);
                 sunked = TRUE;
             }
             break;

@@ -43,7 +43,7 @@ int sign_in(char *nick, char *addr_str, int *sfd_server, int *sfd_listen, int mo
         if (strcmp(status, "OK") == 0) {
             return 1;
         } else if (strcmp(status, "FAILED") == 0) {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Login failed !", message, NULL);
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, "Login failed !", message, window);
             return 0;
         }
     }
@@ -148,7 +148,7 @@ int sendFire(int sfd_o, char *message) {
     check(send(sfd_o, buff, strlen(buff) + 1, 0), "Error sending");
     check(recv(sfd_o, buff, MAX_REQ, 0), "Error receiving");
 
-    sscanf(buff, "%s %s", cmd, message);
+    sscanf(buff, "%s %[^\t\n]", cmd, message);
 
     if (!strcmp(cmd, "HIT")) {
         return 1;
@@ -158,7 +158,7 @@ int sendFire(int sfd_o, char *message) {
         return 2;
 //	} else if(!strcmp(cmd, "LOSE")){
 //		return 3;
-    } else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "WARNING", "Some thing wrong happen", NULL);
+    } else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "WARNING", "Some thing wrong happen", window);
     return -1;
 }
 
